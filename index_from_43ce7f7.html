@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo de Bebidas</title>
+  <style>
+    :root {
+      --verde-escuro: #3d4f45;
+      --verde-medio: #4e6358;
+      --verde-claro: #6b8c7a;
+      --creme: #f0ece4;
+      --branco: #ffffff;
+      --cinza-claro: #f5f5f0;
+      --sombra: rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background-color: var(--cinza-claro);
+      color: #2c2c2c;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background-color: var(--verde-escuro);
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    header img.logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.25);
+    }
+
+    header .header-text h1 {
+      font-size: 2rem;
+      color: var(--creme);
+      letter-spacing: 2px;
+      font-weight: normal;
+    }
+
+    header .header-text p {
+      color: rgba(240,236,228,0.7);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background-color: var(--verde-medio);
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    nav a {
+      color: var(--creme);
+      text-decoration: none;
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+      border-radius: 3px;
+    }
+
+    nav a:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    /* ── SECTION ── */
+    .categoria {
+      margin-bottom: 60px;
+    }
+
+    .categoria-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--verde-escuro);
+    }
+
+    .categoria-header .cat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--verde-escuro);
+    }
+
+    .categoria-header h2 {
+      font-size: 1.6rem;
+      color: var(--verde-escuro);
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+
+    /* ── GRID ── */
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--branco);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px var(--sombra);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .card-img-wrap {
+      background: #f8f7f4;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    .card-img-wrap img {
+      max-height: 156px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .card-body {
+      padding: 14px 14px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-body h3 {
+      font-size: 0.88rem;
+      font-weight: bold;
+      color: #2c2c2c;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .card-body .preco {
+      font-size: 1.1rem;
+      color: var(--verde-escuro);
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background-color: var(--verde-escuro);
+      color: rgba(240,236,228,0.7);
+      text-align: center;
+      padding: 24px;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    footer img.logo-footer {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 600px) {
+      header { flex-direction: column; text-align: center; }
+      header .header-text h1 { font-size: 1.5rem; }
+      .produtos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img class="logo" src="images/logo.jpeg" alt="Logo da Empresa" />
+  <div class="header-text">
+    <h1>CATÁLOGO DE BEBIDAS</h1>
+    <p>Seleção Premium de Produtos</p>
+  </div>
+</header>
+
+<nav>
+  <a href="#gin">Gin</a>
+  <a href="#vodka">Vodka</a>
+  <a href="#whisky">Whisky</a>
+  <a href="#espumante">Espumante</a>
+  <a href="#vinho-tinto">Vinho Tinto</a>
+  <a href="#vinho-branco">Vinho Branco</a>
+  <a href="#vinho-rose">Vinho Rosé</a>
+  <a href="#cerveja">Cerveja</a>
+  <a href="#energetico">Energético</a>
+  <a href="#refrigerante">Refrigerante</a>
+  <a href="#licor">Licor</a>
+  <a href="#cachaca">Cachaça</a>
+  <a href="#tequila">Tequila</a>
+  <a href="#agua">Água</a>
+  <a href="#sucos">Sucos</a>
+	  <a href="#outros">Outros</a>
+</nav>
+
+<main>
+
+  <!-- ═══════════════ SUCOS ═══════════════ -->
+  <section class="categoria" id="sucos">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/logo.jpeg" alt="Sucos" />
+      <h2>🍹 Sucos</h2>
+    </div>
+    <div class="produtos-grid">
+      <!-- Produtos de Sucos aqui -->
+    </div>
+  </section>
+
+  <!-- ═══════════════ GIN ═══════════════ -->
+  <section class="categoria" id="gin">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/gin_tanqueray.png" alt="Gin" />
+      <h2>🍸 Gin</h2>
+    </div>
+    <div class="produtos-grid">
+
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/gin_tanqueray_bossa_750ml.jpg" alt="Tanqueray Bossa" /></div>
+<div class="card-body"><h3>Tanqueray Bossa 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/gin_tanqueray_rangpur.png" alt="Tanqueray Rangpur" /></div>
+<div class="card-body"><h3>Tanqueray Rangpur</h3><span class="preco"> R$ 109,20 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/gin_tanqueray.png" alt="Tanqueray 750ml" /></div>
+<div class="card-body"><h3>Tanqueray 750ml</h3><span class="preco"> R$ 129,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GORDONS_SICILIAN_700ML.jpg" alt="Gordon's Sicilian" /></div>
+<div class="card-body"><h3>Gordons Sicilian 700ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GORDONS_LONDON_DRY_750ML.jpg" alt="Gordon's London Dry" /></div>
+<div class="card-body"><h3>Gordons London Dry 750ml</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GIN_BOMBAY_750ML.jpg" alt="Bombay 750ml" /></div>
+<div class="card-body"><h3>Bombay 750ml</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GIN_BEEFEATER_BLACK_CHERRY_6X700ML.png" alt="Beefeater Black Cherry" /></div>
+<div class="card-body"><h3>Beefeater Black Cherry 700ml</h3><span class="preco"> R$ 181,99 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GIN_BEEFEATER_PINK.png" alt="Beefeater Pink" /></div>
+<div class="card-body"><h3>Beefeater Pink</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GIN_BEEFEATER.jpg" alt="Beefeater" /></div>
+<div class="card-body"><h3>Beefeater</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/Rapa_nui_Sauvignon_Blanc.jpeg" alt="Rapa Nui Sauvignon Blanc" /></div>
+<div class="card-body"><h3>Rapa Nui Sauvignon Blanc</h3><span class="preco"> R$ 37,57 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BALLENA_ORIGINAL.jpg" alt="Ballena Original" /></div>
+<div class="card-body"><h3>Ballena Original</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BGP700_BACCO_DRY_GIN_700_ML.jpg" alt="Bacco Dry Gin" /></div>
+<div class="card-body"><h3>Bacco Dry Gin 700ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GIN_HAMBRE_750ML.jpg" alt="Gin Hambre" /></div>
+<div class="card-body"><h3>Hambre 750ml</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MZI700_MIDEN_ITALIAN_APERITIVO_SEM_ALCOOL_700_ML.webp" alt="Miden Italian Aperitivo" /></div>
+<div class="card-body"><h3>Miden Italian Aperitivo S/ Álcool 700ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VODKA ═══════════════ -->
+  <section class="categoria" id="vodka">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vodka_greygoose.jpg" alt="Vodka" />
+      <h2>🥃 Vodka</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/VODKA_GREY_GOOSE_CITRON_6X750_ML.jpg" alt="Grey Goose Citron" /></div>
+<div class="card-body"><h3>Vodka Grey Goose Citron 750ml</h3><span class="preco"> R$ 184,59 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/VODKA_GREY_GOOSE_LA_POIRE_750_ML.png" alt="Grey Goose La Poire" /></div>
+<div class="card-body"><h3>Vodka Grey Goose La Poire 750ml</h3><span class="preco"> R$ 180,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/vodka_greygoose.jpg" alt="Grey Goose Original" /></div>
+<div class="card-body"><h3>Vodka Grey Goose Original 750ml</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/vodka_belvede_baunilha.jpg" alt="Belvedere Baunilha" /></div>
+<div class="card-body"><h3>Vodka Belvedere Baunilha</h3><span class="preco"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/VODKA_BELVEDERE_6X700ML.jpg" alt="Belvedere 700ml" /></div>
+<div class="card-body"><h3>Vodka Belvedere 700ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ABSOLUT_1L.png" alt="Absolut 1L" /></div>
+<div class="card-body"><h3>Absolut 1L</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/vodka_pravda.jpg" alt="Vodka Pravda" /></div>
+<div class="card-body"><h3>Vodka Pravda</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SMIRNOFF_VODKA_998ML.jpg" alt="Smirnoff 998ml" /></div>
+<div class="card-body"><h3>Smirnoff Vodka 998ml</h3><span class="preco"> R$ 37,48 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SMIRNOFF_ICE_275ML.png" alt="Smirnoff Ice" /></div>
+<div class="card-body"><h3>Smirnoff Ice 275ml</h3><span class="preco"> R$ 7,31 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CIROC_RED_BERRY_750ML.jpg" alt="Ciroc Red Berry" /></div>
+<div class="card-body"><h3>Ciroc Red Berry 750ml</h3><span class="preco"> R$ 185,77 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CIROC_VODKA_750ML.jpg" alt="Ciroc Vodka" /></div>
+<div class="card-body"><h3>Ciroc Vodka 750ml</h3><span class="preco"> R$ 181,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BVP998_BACCO_VODKA_998_ML.jpg" alt="Bacco Vodka" /></div>
+<div class="card-body"><h3>Bacco Vodka 998ml</h3><span class="preco"> R$ 71,37 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ WHISKY ═══════════════ -->
+  <section class="categoria" id="whisky">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/whisky_jackdaniels.jpg" alt="Whisky" />
+      <h2>🥃 Whisky</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_07.jpg" alt="Jack Daniels 07" /></div>
+<div class="card-body"><h3>Whisky Jack Daniel's No. 7</h3><span class="preco"> R$ 151,97 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_HONEY.jpg" alt="Jack Daniels Honey" /></div>
+<div class="card-body"><h3>Whisky Jack Daniel's Honey</h3><span class="preco"> R$ 155,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_FIRE.jpg" alt="Jack Daniels Fire" /></div>
+<div class="card-body"><h3>Whisky Jack Daniel's Fire</h3><span class="preco"> R$ 155,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_APPLE.png" alt="Jack Daniels Apple" /></div>
+<div class="card-body"><h3>Whisky Jack Daniel's Apple</h3><span class="preco"> R$ 168,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/JACK_HONEY_LEMONADE_LT_330ML.png" alt="Jack Honey Lemonade" /></div>
+<div class="card-body"><h3>Jack Honey Lemonade Lata 330ml</h3><span class="preco"> R$ 11,53 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/JACK_E_COKE_LT_269ML_6.jpg" alt="Jack e Coke" /></div>
+<div class="card-body"><h3>Jack &amp; Coke Lata 269ml</h3><span class="preco"> R$ 9,43 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_BLACK_LABEL.jpg" alt="Black Label" /></div>
+<div class="card-body"><h3>Whisky Black Label 750ml</h3><span class="preco"> R$ 155,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_RED_LABEL.jpg" alt="Red Label" /></div>
+<div class="card-body"><h3>Whisky Red Label</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_GOLD_LABEL_750ML.jpg" alt="Gold Label" /></div>
+<div class="card-body"><h3>Whisky Gold Label 750ml</h3><span class="preco"> R$ 272,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JIM_BEAM_BLACK_EXTRA_1LT.png" alt="Jim Beam Black Extra" /></div>
+<div class="card-body"><h3>Jim Beam Black Extra 1L</h3><span class="preco"> R$ 196,29 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/whisky_jimbeam.png" alt="Jim Beam White" /></div>
+<div class="card-body"><h3>Jim Beam Bourbon White 1L</h3><span class="preco"> R$ 103,99 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JIM_BEAM_RYE_700ML.jpg" alt="Jim Beam Rye" /></div>
+<div class="card-body"><h3>Jim Beam Rye 700ml</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_JIM_BEAM_BLACK_CHERRY_1LT.jpg" alt="Jim Beam Black Cherry" /></div>
+<div class="card-body"><h3>Jim Beam Black Cherry 1L</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_BALLANTINES_SUNSHINE_700ML.png" alt="Ballantines Sunshine" /></div>
+<div class="card-body"><h3>Ballantines Sunshine 700ml</h3><span class="preco"> R$ 77,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BALLENTINES_WHISKY_750ML.jpg" alt="Ballentines 750ml" /></div>
+<div class="card-body"><h3>Ballentines Whisky 750ml</h3><span class="preco"> R$ 80,60 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_WILD_SIDE_AMERICAN_700ML.jpg" alt="Wild Side American" /></div>
+<div class="card-body"><h3>Wild Side American 700ml</h3><span class="preco"> R$ 103,99 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/maromba_whisky_combo.png" alt="Maromba Whisky Combo" /></div>
+<div class="card-body"><h3>Maromba Whisky Combo</h3><span class="preco"> R$ 23,40 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_CHIVAS_1L.jpg" alt="Chivas 1L" /></div>
+<div class="card-body"><h3>Whisky Chivas 1L</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/whisky_blacklabel.png" alt="Buchanans 1L" /></div>
+<div class="card-body"><h3>Whisky Buchanan's 1L</h3><span class="preco"> R$ 219,70 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/whisky_blacklabel.png" alt="Old Parr 1L" /></div>
+<div class="card-body"><h3>Whisky Old Parr 1L</h3><span class="preco"> R$ 181,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/WHISKY_FIREBALL.jpg" alt="Fireball" /></div>
+<div class="card-body"><h3>Whisky Fireball</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BACCO_NIZYA_WHYSKI.jpg" alt="Bacco Nizya Whyski" /></div>
+<div class="card-body"><h3>Bacco Nizya Whyski</h3><span class="preco"> R$ 71,50 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ROYAL_SALUTE_21_ANOS.jpeg" alt="Royal Salute 21 Anos" /></div>
+<div class="card-body"><h3>Royal Salute 21 Anos</h3><span class="preco"> R$ 1.168,70 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BLC750_FIRE_CANELA_750_ML.jpg" alt="Fire Canela" /></div>
+<div class="card-body"><h3>Fire Canela 750ml</h3><span class="preco"> R$ 77,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ ESPUMANTE ═══════════════ -->
+  <section class="categoria" id="espumante">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/espumante_chandon.png" alt="Espumante" />
+      <h2>🥂 Espumante / Champagne</h2>/
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/spumante_chandon_1,5L.jpg" alt="Chandon Spumante 1.5L" /></div>
+<div class="card-body"><h3>Spumante Chandon 1,5L</h3><span class="preco"> R$ 195,00 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESP_CHANDON_PASSION_6X750ML.jpg" alt="Chandon Passion" /></div>
+<div class="card-body"><h3>Chandon Passion 750ml</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESP_CHANDON_RESERVE_BRUT_6X750ML.jpg" alt="Chandon Reserve Brut" /></div>
+<div class="card-body"><h3>Chandon Reserve Brut 750ml</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/espumante_chandon.png" alt="Chandon Brut Rosé" /></div>
+<div class="card-body"><h3>Chandon Brut Rosé 750ml</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESP_VEUVE_CLICQUOT_BRUT_6X750ML.png" alt="Veuve Clicquot Brut" /></div>
+<div class="card-body"><h3>Veuve Clicquot Brut 750ml</h3><span class="preco"> R$ 506,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_MIOLO_IRIDE_GOLD_10_ANOS.webp" alt="Miolo Iride Gold 10 Anos" /></div>
+<div class="card-body"><h3>Miolo Iride Gold 10 Anos</h3><span class="preco"> R$ 391,30 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_BOTTEGA_GOLD_PROSECCO_DOC_-_(BCO).jpg" alt="Bottega Gold Prosecco" /></div>
+<div class="card-body"><h3>Bottega Gold Prosecco DOC 750ml</h3><span class="preco"> R$ 316,98 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MANDOIS_BRUT_(BCO)_-_CHAMPAGNE.jpeg" alt="Mandois Brut Champagne" /></div>
+<div class="card-body"><h3>Mandois Brut Champagne</h3><span class="preco"> R$ 383,36 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MAXIMS_BRUT_CUVEE.jpg" alt="Maxims Brut Cuvée Champagne" /></div>
+<div class="card-body"><h3>Maxims Brut Cuvée Champagne</h3><span class="preco"> R$ 403,12 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_BELVINO_ROSÉ_BRUT_-_(ROSÉ)_-_SICÍLIA.png" alt="Belvino Rosé Brut" /></div>
+<div class="card-body"><h3>Belvino Rosé Brut - Sicília</h3><span class="preco"> R$ 65,55 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_BELVINO_GRILLO_BRUT_-_(BCO)_-_SICÍLIA.png"Belvino Grillo Brut" /></div>
+<div class="card-body"><h3>Belvino Grillo Brut - Sicília</h3><span class="preco"> R$ 65,55 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_VOGA_PROSECCO_BLACK_SPECIAL_EDITION_DOC_-_(BCO)_-.jpg" alt="Voga Prosecco Black" /></div>
+<div class="card-body"><h3>Voga Prosecco Black Special Edition DOC</h3><span class="preco"> R$ 162,83 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_NORTON_BRUT_-_(ROSÉ)_-_MENDOZA.webp" alt="Norton Brut Rosé" /></div>
+<div class="card-body"><h3>Norton Brut Rosé - Mendoza</h3><span class="preco"> R$ 65,33 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_101_BUBBLES_EXTRA_BRUT_-_(BCO)_-_MENDOZA.jpg" alt="101 Bubbles Extra Brut" /></div>
+<div class="card-body"><h3>101 Bubbles Extra Brut - Mendoza</h3><span class="preco"> R$ 83,76 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_MESSIAS_BAIRRADA_EXTRA_BRUT_-_(BCO)_-_BAIRRADA.jpg" alt="Messias Bairrada Extra Brut" /></div>
+<div class="card-body"><h3>Messias Bairrada Extra Brut</h3><span class="preco"> R$ 83,16 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_3B_CÁPSULA_ROSA_-_(ROSE)_-_BAIRRADA.jpg" alt="3B Cápsula Rosa" /></div>
+<div class="card-body"><h3>3B Cápsula Rosa - Bairrada</h3><span class="preco"> R$ 131,08 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_3B_BLANC_DE_BLANCS_(BCO)_-_BAIRRADA.webp" alt="3B Blanc de Blancs" /></div>
+<div class="card-body"><h3>3B Blanc de Blancs - Bairrada</h3><span class="preco"> R$ 158,74 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_CAVA_BRUT_DON_ROMAN__-_(BCO)_-_PENEDÉS.jpg" alt="Cava Brut Don Roman" /></div>
+<div class="card-body"><h3>Cava Brut Don Roman - Penedés</h3><span class="preco"> R$ 79,04 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_CAVA_SEMI_SÉC_DON_ROMAN_-_(BCO)_-_PENEDÉS.jpg" alt="Cava Semi Séc Don Roman" /></div>
+<div class="card-body"><h3>Cava Semi Séc Don Roman - Penedés</h3><span class="preco"> R$ 79,04 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_BEAU_ROCHER_BRUT_-_(BCO)_-_LANGUEDOC.png" alt="Beau Rocher Brut Branco" /></div>
+<div class="card-body"><h3>Beau Rocher Brut Branco - Languedoc</h3><span class="preco"> R$ 57,32 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_BEAU_ROCHER_BRUT_-_(ROSÉ)_-_LANGUEDOC.png" alt="Beau Rocher Brut Rosé" /></div>
+<div class="card-body"><h3>Beau Rocher Brut Rosé - Languedoc</h3><span class="preco"> R$ 57,32 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_MOILLARD_CRÉMANT_DE_BOURGOGNE_BRUT_PRESTIGE_2020_-.png" alt="Moillard Crémant Bourgogne" /></div>
+<div class="card-body"><h3>Moillard Crémant de Bourgogne Brut 2020</h3><span class="preco"> R$ 217,93 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_BASCO_LOCO_BRUT_-_(BCO)_-_VALE_DOS_VINHEDOS_RS.png" alt="Basco Loco Brut" /></div>
+<div class="card-body"><h3>Basco Loco Brut - Vale dos Vinhedos/RS</h3><span class="preco"> R$ 79,08 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VINHO TINTO ═══════════════ -->
+  <section class="categoria" id="vinho-tinto">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vinho_tinto_malbec.jpg" alt="Vinho Tinto" />
+      <h2>🍷 Vinho Tinto</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NORTON_RESERVA_MALBEC_-_(TTO)_-_MENDOZA.jpg" alt="Norton Reserva Malbec" /></div>
+<div class="card-body"><h3>Norton Reserva Malbec - Mendoza</h3><span class="preco"> R$ 88,92 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NORTON_D.O.C_MALBEC_-_(TTO)_-_MENDOZA.jpg" alt="Norton D.O.C Malbec" /></div>
+<div class="card-body"><h3>Norton D.O.C Malbec - Mendoza</h3><span class="preco"> R$ 75,96 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NORTON_SELECT_MALBEC_-_(TTO)_-_MENDOZA.jpg" alt="Norton Select Malbec" /></div>
+<div class="card-body"><h3>Norton Select Malbec - Mendoza</h3><span class="preco"> R$ 65,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NORTON_ALTURA_PINOT_NOIR_-_(TTO)_-_VALE_DE_UCO,_MENDOZA.jpg" alt="Norton Altura Pinot Noir" /></div>
+<div class="card-body"><h3>Norton Altura Pinot Noir - Vale de Uco</h3><span class="preco"> R$ 135,89 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PORTEÑO_CABERNET_SAUVIGNON_-_(TTO)_-_MENDOZA.png" alt="Porteño Cabernet Sauvignon" /></div>
+<div class="card-body"><h3>Porteño Cabernet Sauvignon - Mendoza</h3><span class="preco"> R$ 37,52 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PORTEÑO_SUAVE_TINTO_-_(TTO)_-_MENDOZA.jpg" alt="Porteño Suave Tinto" /></div>
+<div class="card-body"><h3>Porteño Suave Tinto - Mendoza</h3><span class="preco"> R$ 37,52 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CALDORA_MONTEPULCIANO_DABRUZZO_DOC_-_(TTO)_-_ABRUZZO.png" alt="Caldora Montepulciano" /></div>
+<div class="card-body"><h3>Caldora Montepulciano d'Abruzzo DOC</h3><span class="preco"> R$ 107,39 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LUCCARELLI_ROSSO_IGP_-_(TTO)_-_PUGLIA.jpg" alt="Luccarelli Rosso IGP" /></div>
+<div class="card-body"><h3>Luccarelli Rosso IGP - Puglia</h3><span class="preco"> R$ 86,10 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LUCCARELLI_PRIMITIVO_DI_MANDURIA_OLD_VINES_DOP_-_(TTO)_-_PUG.jpg" alt="Luccarelli Primitivo" /></div>
+<div class="card-body"><h3>Luccarelli Primitivo di Manduria Old Vines DOP</h3><span class="preco"> R$ 50,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CORBELLI_PRIMITIVO_IGT_-_(TTO)_-_PUGLIA.jpg" alt="Corbelli Primitivo" /></div>
+<div class="card-body"><h3>Corbelli Primitivo IGT - Puglia</h3><span class="preco"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CORBELLI_SANGIOVESE_IGT_-_(TTO)_-_PUGLIA.png" alt="Corbelli Sangiovese" /></div>
+<div class="card-body"><h3>Corbelli Sangiovese IGT - Puglia</h3><span class="preco"> R$ 50,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CORBELLI_PINOT_GRIGIO_IGT_-_(BCO)_-_SICILIA.jpg" alt="Corbelli Pinot Grigio Tinto" /></div>
+<div class="card-body"><h3>Corbelli Pinot Grigio IGT - Sicilia</h3><span class="preco"> R$ 50,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/FORTE_AMBRONE_ETICHETTA_NERA_IGT_-_(TTO)_-_TOSCANA.webp" alt="Forte Ambrone Etichetta Nera" /></div>
+<div class="card-body"><h3>Forte Ambrone Etichetta Nera IGT - Toscana</h3><span class="preco"> R$ 64,05 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TRUFFLE_HUNTER_LEDA_BAROLO_DOCG_-_(TTO)_-_PIEMONTE.png" alt="Truffle Hunter Leda Barolo" /></div>
+<div class="card-body"><h3>Truffle Hunter Leda Barolo DOCG - Piemonte</h3><span class="preco"> R$ 308,26 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CACHÃO_-_(BCO)_-_DOURO.jpg" alt="Cachão Tinto Douro" /></div>
+<div class="card-body"><h3>Cachão Tinto - Douro</h3><span class="preco"> R$ 136,86 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LOIOS_-_(TTO)_-_ALENTEJO.png" alt="Loios Alentejo" /></div>
+<div class="card-body"><h3>Loios - Alentejo</h3><span class="preco"> R$ 54,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MARQUES_DE_BORBA_COLHEITA_-_(TTO)_-_ALENTEJO.png" alt="Marques de Borba Colheita" /></div>
+<div class="card-body"><h3>Marques de Borba Colheita - Alentejo</h3><span class="preco"> R$ 81,59 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BOM_JUIZ_-_(TTO)_-_ALENTEJO.jpeg" alt="Bom Juiz Alentejo" /></div>
+<div class="card-body"><h3>Bom Juiz - Alentejo</h3><span class="preco"> R$ 145,38 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/DUORUM_COLHEITA_-_(TTO)_-_DOURO.jpeg" alt="Duorum Colheita Douro" /></div>
+<div class="card-body"><h3>Duorum Colheita - Douro</h3><span class="preco"> R$ 355,60 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TONS_DE_DUORUM_-_(TTO)_-_DOURO.png" alt="Tons de Duorum Tinto" /></div>
+<div class="card-body"><h3>Tons de Duorum Tinto - Douro</h3><span class="preco"> R$ 67,34 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/REGIA_COLHEITA_DOC_-_(TTO)_-_ALENTEJO.png" alt="Regia Colheita Tinto" /></div>
+<div class="card-body"><h3>Regia Colheita DOC Tinto - Alentejo</h3><span class="preco"> R$ 126,56 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/QUINTA_DO_PENEDO_DOC_-_(TTO)_-_DÃO.jpg" alt="Quinta do Penedo Tinto" /></div>
+<div class="card-body"><h3>Quinta do Penedo DOC Tinto - Dão</h3><span class="preco"> R$ 129,04 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/POUCA_ROUPA_-_(TTO)_-_ALENTEJO.jpg" alt="Pouca Roupa Tinto" /></div>
+<div class="card-body"><h3>Pouca Roupa Tinto - Alentejo</h3><span class="preco"> R$ 47,48 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/OLARIA_MEIO_SECO_-_(BCO)_-_ALENTEJO.jpg" alt="Olaria Meio Seco Tinto" /></div>
+<div class="card-body"><h3>Olaria Meio Seco Tinto - Alentejo</h3><span class="preco"> R$ 35,78 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MARQUES_DE_TOMARES_EXCELLENCE_-_(TTO)_-_RIOJA.jpg" alt="Marques de Tomares Excellence" /></div>
+<div class="card-body"><h3>Marques de Tomares Excellence - Rioja</h3><span class="preco"> R$ 74,79 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PATA_NEGRA_ORO_(TEMPRANILLO)_-_(TTO)_-_VALDEPEÑAS.png" alt="Pata Negra Oro Tempranillo" /></div>
+<div class="card-body"><h3>Pata Negra Oro Tempranillo - Valdepeñas</h3><span class="preco"> R$ 48,67 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NUESTRO_8_MESES_(ROBLE)_-_(TTO)_-_RIBERA_DEL_DUERO.png" alt="Nuestro 8 Meses Ribera" /></div>
+<div class="card-body"><h3>Nuestro 8 Meses Roble - Ribera del Duero</h3><span class="preco"> R$ 81,13 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/COHIBA_ATMOSPHERE_RESERVA_DOC_-_(TTO)_-_RIOJA.jpeg" alt="Cohiba Atmosphere Reserva" /></div>
+<div class="card-body"><h3>Cohiba Atmosphere Reserva DOC - Rioja</h3><span class="preco"> R$ 471,67 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PETIT_VEGA_8_MESES_-_(TTO)_-_RIBERA_DEL_DUERO.png" alt="Petit Vega 8 Meses" /></div>
+<div class="card-body"><h3>Petit Vega 8 Meses - Ribera del Duero</h3><span class="preco"> R$ 77,43 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MIL_HISTORIAS_SYRAH_-_(TTO)_-_MANCHUELA.png" alt="Mil Historias Syrah" /></div>
+<div class="card-body"><h3>Mil Historias Syrah - Manchuela</h3><span class="preco"> R$ 117,27 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/VIÑA_NELA_D.O_-_(TTO)_-_CASTILLA-LA_MANCHA.png" alt="Viña Nela Castilla" /></div>
+<div class="card-body"><h3>Viña Nela - Castilla-La Mancha</h3><span class="preco"> R$ 27,72 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CHATEAU_LABAT_2019_-_(TTO)_-_HAUT_MEDOC,_BORDEAUX.png" alt="Chateau Labat 2019" /></div>
+<div class="card-body"><h3>Château Labat 2019 - Haut Médoc, Bordeaux</h3><span class="preco"> R$ 208,12 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BODEGA_VIEJA_CABERNET_SAUVIGNON_(TTO)_-_MAIPO.png" alt="Bodega Vieja Cabernet" /></div>
+<div class="card-body"><h3>Bodega Vieja Cabernet Sauvignon - Maipo</h3><span class="preco"> R$ 32,32 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SANTA_CAROLINA_RESERVADO_CABERNET_SAUVIGNON_-_(TTO)_-_VALE_C.jpg" alt="Santa Carolina Reservado CS" /></div>
+<div class="card-body"><h3>Santa Carolina Reservado Cabernet Sauvignon</h3><span class="preco"> R$ 35,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CAROLINA_RESERVA_CABERNET_SAUVIGNON_-_(TTO)_-_VALE_DE_COLCHA.png" alt="Carolina Reserva CS" /></div>
+<div class="card-body"><h3>Carolina Reserva Cabernet Sauvignon</h3><span class="preco"> R$ 66,21 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CAROLINA_RESERVA_MERLOT_-_(TTO)_-_VALE_DE_COLCHAGUA.png" alt="Carolina Reserva Merlot" /></div>
+<div class="card-body"><h3>Carolina Reserva Merlot - Colchagua</h3><span class="preco"> R$ 66,21 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CAROLINA_RESERVA__PINOT_NOIR_-_(TTO)_-_VALE_DO_LEYDA.jpg" alt="Carolina Reserva Pinot Noir" /></div>
+<div class="card-body"><h3>Carolina Reserva Pinot Noir - Leyda</h3><span class="preco"> R$ 79,47 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SANTA_CAROLINA_ESTELAR_57_CARMENÈRE_-_(TTO)_-_VALE_CENTRAL.png" alt="Santa Carolina Estelar Carmenère" /></div>
+<div class="card-body"><h3>Santa Carolina Estelar 57 Carmenère</h3><span class="preco"> R$ 48,56 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SANTA_CAROLINA_ESTELAR_57_CABERNET_SAUVIGNON_-_(TTO)_-_VALE.png" alt="Santa Carolina Estelar CS" /></div>
+<div class="card-body"><h3>Santa Carolina Estelar 57 Cabernet Sauvignon</h3><span class="preco"> R$ 48,56 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CALITERRA_RESERVA_CABERNET_SAUVIGNON_-_(TTO)_-_D.O_COLCHAGUA.jpg" alt="Caliterra Reserva CS" /></div>
+<div class="card-body"><h3>Caliterra Reserva Cabernet Sauvignon - Colchagua</h3><span class="preco"> R$ 65,29 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CALITERRA_RESERVA_CARMENERE_-_(TTO)_-_D.O_COLCHAGUA.jpg" alt="Caliterra Reserva Carmenere" /></div>
+<div class="card-body"><h3>Caliterra Reserva Carmenere - Colchagua</h3><span class="preco"> R$ 65,29 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CALITERRA_RESERVA_MERLOT_-_(TTO)_D.O_COLCHAGUA.jpg" alt="Caliterra Reserva Merlot" /></div>
+<div class="card-body"><h3>Caliterra Reserva Merlot - Colchagua</h3><span class="preco"> R$ 65,29 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TABALI_PEDREGOSO_GRAN_RESERVA_CABERNET_SAUVIGNON_-_(TTO)_-_D.jpg" alt="Tabali Pedregoso CS" /></div>
+<div class="card-body"><h3>Tabali Pedregoso Gran Reserva Cabernet Sauvignon</h3><span class="preco"> R$ 101,53 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TABALI_PEDREGOSO_GRAN_RESERVA_CARMÈNERE_-_(TTO)_-_D.O._VALLE.jpg" alt="Tabali Pedregoso Carmenere" /></div>
+<div class="card-body"><h3>Tabali Pedregoso Gran Reserva Carmènere</h3><span class="preco"> R$ 101,53 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TABALI_PEDREGOSO_GRAN_RESERVA_PINOT_NOIR_-_(TTO)_-_D.O._VALL.jpg" alt="Tabali Pedregoso Pinot Noir" /></div>
+<div class="card-body"><h3>Tabali Pedregoso Gran Reserva Pinot Noir</h3><span class="preco"> R$ 101,53 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TABALI_ROSÉ_PEDREGOSO_GRAN_RESERVA_PINOT_NOIR_-_(ROSÉ)_-_D.O.jpg" alt="Tabali Pedregoso Rosé" /></div>
+<div class="card-body"><h3>Tabali Rosé Pedregoso Gran Reserva Pinot Noir</h3><span class="preco"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TABALI_PEDREGOSO_GRAN_RESERVA_CABERNET_FRANC_-_(TTO)_-_D.O..png" alt="Tabali Pedregoso Cabernet Franc" /></div>
+<div class="card-body"><h3>Tabali Pedregoso Gran Reserva Cabernet Franc</h3><span class="preco"> R$ 101,53 </span></div>
+      </div>
+      <!-- Vinho Porto/Moscatel -->
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PORTO_MESSIAS_TAWNY__-_DOURO.png" alt="Porto Messias Tawny" /></div>
+<div class="card-body"><h3>Porto Messias Tawny - Douro</h3><span class="preco"> R$ 80,78 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VINHO BRANCO ═══════════════ -->
+  <section class="categoria" id="vinho-branco">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vinho_branco.jpg" alt="Vinho Branco" />
+      <h2>🍾 Vinho Branco</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NORTON_ALTURA_WHITE_BLEND_-_(BCO)_-_VALE_DE_UCO,_MENDOZA.jpg" alt="Norton Altura White Blend" /></div>
+<div class="card-body"><h3>Norton Altura White Blend - Vale de Uco</h3><span class="preco"> R$ 135,89 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SEXY_FISH_BLANC_DE_BLANCS_-_(BCO)_-_MENDOZA.png" alt="Sexy Fish Blanc de Blancs" /></div>
+<div class="card-body"><h3>Sexy Fish Blanc de Blancs - Mendoza</h3><span class="preco"> R$ 49,57 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/FORTE_AMBRONE_BIANCO_IGT_-_(BCO)_-_TOSCANA.png" alt="Forte Ambrone Bianco" /></div>
+<div class="card-body"><h3>Forte Ambrone Bianco IGT - Toscana</h3><span class="preco"> R$ 64,05 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/vinho_branco.jpg" alt="Cachão Branco Douro" /></div>
+<div class="card-body"><h3>Cachão Branco - Douro</h3><span class="preco"> R$ 82,47 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MADEIRA_JUSTINOS_3_ANOS_-_ILHA_DA_MADEIRA.jpg" alt="Madeira Justinos 3 Anos" /></div>
+<div class="card-body"><h3>Madeira Justinos 3 Anos</h3><span class="preco"> R$ 112,81 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TONS_DE_DUORUM_-_(BCO)_-_DOURO.png" alt="Tons de Duorum Branco" /></div>
+<div class="card-body"><h3>Tons de Duorum Branco - Douro</h3><span class="preco"> R$ 67,34 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LOUREIRO_DOC_-_VINHO_VERDE_-_(BCO)_-_MONÇÃO_E_MELGAÇO.png" alt="Loureiro DOC Vinho Verde" /></div>
+<div class="card-body"><h3>Loureiro DOC - Vinho Verde</h3><span class="preco"> R$ 60,55 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/REGIA_COLHEITA_DOC_-_(BCO)_-_ALENTEJO.png" alt="Regia Colheita Branco" /></div>
+<div class="card-body"><h3>Regia Colheita DOC Branco - Alentejo</h3><span class="preco"> R$ 126,56 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/QUINTA_DO_PENEDO_DOC_-_(BCO)_-_DÃO.jpg" alt="Quinta do Penedo Branco" /></div>
+<div class="card-body"><h3>Quinta do Penedo DOC Branco - Dão</h3><span class="preco"> R$ 129,04 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/POUCA_ROUPA_-_(BCO)_-_ALENTEJO.jpg" alt="Pouca Roupa Branco" /></div>
+<div class="card-body"><h3>Pouca Roupa Branco - Alentejo</h3><span class="preco"> R$ 47,48 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/OLARIA_MEIO_SECO_-_(ROSÉ)_-_ALENTEJO.jpg" alt="Olaria Meio Seco Branco" /></div>
+<div class="card-body"><h3>Olaria Meio Seco Branco - Alentejo</h3><span class="preco"> R$ 35,78 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PARDALITO_DOC_-_(BCO)_-_VINHO_VERDE.png" alt="Pardalito DOC Vinho Verde" /></div>
+<div class="card-body"><h3>Pardalito DOC - Vinho Verde</h3><span class="preco"> R$ 41,13 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PARDALITO_SWEET_-_(BCO)_-_MINHO.png" alt="Pardalito Sweet" /></div>
+<div class="card-body"><h3>Pardalito Sweet - Minho</h3><span class="preco"> R$ 41,13 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PATA_NEGRA_ORO_BRANCO_(AIRÉN)_-_(BCO)_-_VALDEPEÑAS.webp" alt="Pata Negra Oro Branco" /></div>
+<div class="card-body"><h3>Pata Negra Oro Branco Airén - Valdepeñas</h3><span class="preco"> R$ 48,67 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CHAN_DE_ROSAS_ALBARIÑO_CUVÉE_-_(BCO)_-_RÍAS_BAIXAS.webp" alt="Chan de Rosas Albariño" /></div>
+<div class="card-body"><h3>Chan de Rosas Albariño Cuvée - Rías Baixas</h3><span class="preco"> R$ 130,81 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NUESTRO_VERDEJO_(BCO)_-_RUEDA.png" alt="Nuestro Verdejo" /></div>
+<div class="card-body"><h3>Nuestro Verdejo - Rueda</h3><span class="preco"> R$ 79,43 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/vinho_branco.jpg" alt="Bodega Vieja Suave" /></div>
+<div class="card-body"><h3>Bodega Vieja Suave Branco - Maipo</h3><span class="preco"> R$ 32,32 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PESCADOR_BRANCO_-_CATALUNHA.png" alt="Pescador Branco" /></div>
+<div class="card-body"><h3>Pescador Branco - Catalunha</h3><span class="preco"> R$ 73,00 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MOILLARD_PETIT_CHABLIS_LES_GRAPES_DOR_AOP_2023_-_(BCO)_-_BO.jpg" alt="Moillard Petit Chablis" /></div>
+<div class="card-body"><h3>Moillard Petit Chablis Les Grapes d'Or AOP 2023</h3><span class="preco"> R$ 236,38 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LILLET_BLANC.jpg" alt="Lillet Blanc" /></div>
+<div class="card-body"><h3>Lillet Blanc</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SANTA_CAROLINA_RESERVADO_SAUVIGNON_BLANC_-_(BCO)_-_VALE_CENT.png" alt="Santa Carolina Reservado Sauvignon Blanc" /></div>
+<div class="card-body"><h3>Santa Carolina Reservado Sauvignon Blanc</h3><span class="preco"> R$ 35,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CAROLINA_RESERVA__SAUVIGNON_BLANC_-_(BCO)_-_VALE_DO_LEYDA.jpg" alt="Carolina Reserva Sauvignon Blanc" /></div>
+<div class="card-body"><h3>Carolina Reserva Sauvignon Blanc - Leyda</h3><span class="preco"> R$ 66,21 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SANTA_CAROLINA_RESERVADO_CHARDONNAY_-_(BCO)_-_VALE_CENTRAL.png" alt="Santa Carolina Reservado Chardonnay" /></div>
+<div class="card-body"><h3>Santa Carolina Reservado Chardonnay</h3><span class="preco"> R$ 35,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SANTA_CAROLINA_ESTELAR_57_SAUVIGNON_BLANC_-_(BCO)_-_VALE_CEN.png" alt="Santa Carolina Estelar Sauvignon Blanc" /></div>
+<div class="card-body"><h3>Santa Carolina Estelar 57 Sauvignon Blanc</h3><span class="preco"> R$ 48,56 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/TABALI_PEDREGOSO_GRAN_RESERVA_CHARDONNAY_-_(BCO)_-_D.O._VALL.png" alt="Tabali Pedregoso Chardonnay" /></div>
+<div class="card-body"><h3>Tabali Pedregoso Gran Reserva Chardonnay</h3><span class="preco"> R$ 101,53 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BASCO_LOCO_CHARDONNAY_-_(BCO)_-_VALE_DOS_VINHEDOS_RS.png" alt="Basco Loco Chardonnay" /></div>
+<div class="card-body"><h3>Basco Loco Chardonnay - Vale dos Vinhedos/RS</h3><span class="preco"> R$ 95,08 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BASCO_LOCO_ALVARINHO_-_(BCO)_-_VALE_DOS_VINHEDOS_RS.png" alt="Basco Loco Alvarinho" /></div>
+<div class="card-body"><h3>Basco Loco Alvarinho - Vale dos Vinhedos/RS</h3><span class="preco"> R$ 95,08 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VINHO ROSÉ ═══════════════ -->
+  <section class="categoria" id="vinho-rose">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vinho_branco.jpg" alt="Vinho Rosé" />
+      <h2>🌸 Vinho Rosé</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SEXY_FISH_ROSÉ_-_(ROSÉ)_-_MENDOZA.png" alt="Sexy Fish Rosé" /></div>
+<div class="card-body"><h3>Sexy Fish Rosé - Mendoza</h3><span class="preco"> R$ 49,57 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CORBELLI_BLUSH_PINOT_GRIGIO_IGT_-_(ROSÉ)_-_SICÍLIA.jpg" alt="Corbelli Blush Pinot Grigio" /></div>
+<div class="card-body"><h3>Corbelli Blush Pinot Grigio IGT - Sicília</h3><span class="preco"> R$ 50,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/POUCA_ROUPA_-_(ROSÉ)_-_ALENTEJO.jpg" alt="Pouca Roupa Rosé" /></div>
+<div class="card-body"><h3>Pouca Roupa Rosé - Alentejo</h3><span class="preco"> R$ 47,48 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/OLARIA_MEIO_SECO_-_(BCO)_-_ALENTEJO.jpg" alt="Olaria Meio Seco Rosé" /></div>
+<div class="card-body"><h3>Olaria Meio Seco Rosé - Alentejo</h3><span class="preco"> R$ 35,78 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PARDALITO_ROSÉ_-_(ROSÉ)_-_MINHO.png" alt="Pardalito Rosé" /></div>
+<div class="card-body"><h3>Pardalito Rosé - Minho</h3><span class="preco"> R$ 41,13 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NUMBERED_EDITION_-_SOTO_DE_OÑATIL_-_(ROSÉ)_-_RIOJA.png" alt="Numbered Edition Rosé Rioja" /></div>
+<div class="card-body"><h3>Numbered Edition Rosé - Rioja</h3><span class="preco"> R$ 42,17 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/PESCADOR_ROSÉ_-_CATALUNHA.jpg" alt="Pescador Rosé" /></div>
+<div class="card-body"><h3>Pescador Rosé - Catalunha</h3><span class="preco"> R$ 73,00 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LE_ROSÉ_DE_FLORIDENE_2022_-_(ROSÉ)_-_GRAVES_-_BORDEAUX.png" alt="Le Rosé de Floridene" /></div>
+<div class="card-body"><h3>Le Rosé de Floridene 2022 - Graves, Bordeaux</h3><span class="preco"> R$ 123,32 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ CERVEJA ═══════════════ -->
+  <section class="categoria" id="cerveja">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/cerveja_heineken.jpg" alt="Cerveja" />
+      <h2>🍺 Cerveja</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/HEINEKN_LATA_350ML.png" alt="Heineken Lata 350ml" /></div>
+<div class="card-body"><h3>Heineken Lata 350ml</h3><span class="preco"> R$ 5,95 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/HEINEKEN_LONG_330ML.jpg" alt="Heineken Long 330ml" /></div>
+<div class="card-body"><h3>Heineken Long Neck 330ml</h3><span class="preco"> R$ 7,31 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/HEINEKN_LATA_ZERO_350ML.webp" alt="Heineken Zero 350ml" /></div>
+<div class="card-body"><h3>Heineken Zero Lata 350ml</h3><span class="preco"> R$ -   </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/HEINKEN_LONG_0_330ML.jpg" alt="Heineken Long 0 330ml" /></div>
+<div class="card-body"><h3>Heineken Long Neck 0% 330ml</h3><span class="preco"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BUDWEISER_OW_SLEEK_330ML.jpg" alt="Budweiser OW 330ml" /></div>
+<div class="card-body"><h3>Budweiser OW 330ml</h3><span class="preco"> R$ 5,50 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BUDWEISER_LT_SLEEK_350ML.jpg" alt="Budweiser Lata 350ml" /></div>
+<div class="card-body"><h3>Budweiser Lata Sleek 350ml</h3><span class="preco"> R$ 4,58 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BUDWEISER_ZERO_LONG_NECK_330ML.jpg" alt="Budweiser Zero Lata" /></div>
+<div class="card-body"><h3>Budweiser Zero Lata Sleek 350ml</h3><span class="preco"> R$ 4,13 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/cerveja_heineken.jpg" alt="Budweiser Zero Long Neck" /></div>
+<div class="card-body"><h3>Budweiser Zero Long Neck 330ml</h3><span class="preco"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BRAHMA_DUPLO_MALTE_LT_SLEEK_350ML.png" alt="Brahma Duplo Malte" /></div>
+<div class="card-body"><h3>Brahma Duplo Malte Lata 350ml</h3><span class="preco"> R$ 4,24 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BRAHMA_CHOPP_LATA_350ML.jpg" alt="Brahma Chopp Lata" /></div>
+<div class="card-body"><h3>Brahma Chopp Lata 350ml</h3><span class="preco"> R$ 3,71 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/patagonia_ipa.jpg" alt="Patagonia IPA" /></div>
+<div class="card-body"><h3>Patagonia IPA</h3><span class="preco"> R$ 3,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/eisenbahn.png" alt="Eisenbahn" /></div>
+<div class="card-body"><h3>Eisenbahn</h3><span class="preco"> R$ 3,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/EISENBAHN_IPA_LN_355ML.jpg" alt="Eisenbahn IPA LN 355ml" /></div>
+<div class="card-body"><h3>Eisenbahn IPA Long Neck 355ml</h3><span class="preco"> R$ 5,33 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/EISENBAHN_PILSEN_LATA_350ML.jpg" alt="Eisenbahn Pilsen Lata" /></div>
+<div class="card-body"><h3>Eisenbahn Pilsen Lata 350ml</h3><span class="preco"> R$ 3,95 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/stanley__beer_pint.jpg" alt="Stanley Beer Pint" /></div>
+<div class="card-body"><h3>Stanley Beer Pint</h3><span class="preco"> R$ 130,00 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/COLORADO_INDICA_ONE_WAY_600ML.jpg" alt="Colorado Indica 600ml" /></div>
+<div class="card-body"><h3>Colorado Indica One Way 600ml</h3><span class="preco"> R$ 13,49 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/AMSTEL_LATA_350ML.jpg" alt="Amstel Lata 350ml" /></div>
+<div class="card-body"><h3>Amstel Lata 350ml</h3><span class="preco"> R$ 3,78 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SPATEN_N_LT_SLEEK_350ML_-.png" alt="Spaten Lata 350ml" /></div>
+<div class="card-body"><h3>Spaten Lata Sleek 350ml</h3><span class="preco"> R$ 4,69 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SPATEN_N_LONG_NECK_330ML_S.png" alt="Spaten Long Neck" /></div>
+<div class="card-body"><h3>Spaten Long Neck 330ml</h3><span class="preco"> R$ 5,29 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SKOL_BRATS_SENSES_LONG_NECK_269ML.jpg" alt="Skol Brats Senses" /></div>
+<div class="card-body"><h3>Skol Brats Senses Long Neck 269ml</h3><span class="preco"> R$ 8,19 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BRATS_RED_MIX_LONG_NECK_269ML.jpg" alt="Brats Red Mix" /></div>
+<div class="card-body"><h3>Brats Red Mix Long Neck 269ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/QUILMES_LG_340ML.jpg" alt="Quilmes LG 340ml" /></div>
+<div class="card-body"><h3>Quilmes LG 340ml</h3><span class="preco"> R$ 8,83 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SOL_LG_330ML.png" alt="Sol LG 330ml" /></div>
+<div class="card-body"><h3>Sol LG 330ml</h3><span class="preco"> R$ 7,68 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/FLYING_FISH_LT_SLEEK_350ML.png" alt="Flying Fish Lata" /></div>
+<div class="card-body"><h3>Flying Fish Lata Sleek 350ml</h3><span class="preco"> R$ 4,89 </span></div>
+      </div>
+      <!-- Chopp -->
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/DRAFT_CHOPP_VINHO_600ML.jpg" alt="Draft Chopp Vinho 600ml" /></div>
+<div class="card-body"><h3>Draft Chopp Vinho 600ml</h3><span class="preco"> R$ 9,43 </span></div>
+      </div>
+      <!-- Original -->
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ORIGINAL_LATA_350ML.webp" alt="Original Lata 350ml" /></div>
+<div class="card-body"><h3>Original Lata 350ml</h3><span class="preco"> R$ 5,02 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ORIGINAL_ONE_WAY_600ML.jpg" alt="Original One Way 600ml" /></div>
+<div class="card-body"><h3>Original One Way 600ml</h3><span class="preco"> R$ 9,89 </span></div>
+      </div>
+    </div>
+  </section>
+    </div>
+  </section>
+  <!-- ═══════════════ ENERGÉTICO ═══════════════ -->
+  <section class="categoria" id="energetico">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/energetico_monster.jpg" alt="Energético" />
+      <h2>⚡ Energético</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MONSTER_ENERGY_LT_473ML.png" alt="Monster Energy" /></div>
+<div class="card-body"><h3>Monster Energy Lata 473ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MONSTER_ULTRA_LT_473ML.jpg" alt="Monster Ultra" /></div>
+<div class="card-body"><h3>Monster Ultra Lata 473ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MONSTER_ENERGY_ZERO__473ML.jpg" alt="Monster Zero" /></div>
+<div class="card-body"><h3>Monster Energy Zero 473ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MONSTER_MANGO_LOCO_LATA_473ML.jpg" alt="Monster Mango Loco" /></div>
+<div class="card-body"><h3>Monster Mango Loco 473ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MONSTER_JUIC_RIO_PUNCH_LT_473ML_FL_CP_06.jpg" alt="Monster Juic Rio Punch" /></div>
+<div class="card-body"><h3>Monster Juic Rio Punch 473ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/MONSTER_PACIFIC_PUNCH_LT_473ML_6U_FL_CP.jpg" alt="Monster Pacific Punch" /></div>
+<div class="card-body"><h3>Monster Pacific Punch 473ml</h3><span class="preco"> R$ 8,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_BR_LATA_250ML.jpg" alt="Red Bull 250ml" /></div>
+<div class="card-body"><h3>Red Bull Lata 250ml</h3><span class="preco"> R$ 9,09 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_SUGAR_FREE_BR_LATA_250ML_FOUR_PACK_NPAL.jpg" alt="Red Bull Sugar Free 250ml" /></div>
+<div class="card-body"><h3>Red Bull Sugar Free 250ml</h3><span class="preco"> R$ 9,09 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_SUGAR_FREE_BR_LATA_355ML_FOUR_PACK.jpg" alt="Red Bull Sugar Free 355ml" /></div>
+<div class="card-body"><h3>Red Bull Sugar Free 355ml</h3><span class="preco"> R$ 10,01 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_MELANCIA_LATA_250ML_FOUR_PACK_NPA.jpg" alt="Red Bull Melancia" /></div>
+<div class="card-body"><h3>Red Bull Melancia 250ml</h3><span class="preco"> R$ 7,88 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_SUMMER_MORANGO_E_PÊSSEGO_LATA_250ML_FOUR_PACK.jpg" alt="Red Bull Summer Morango" /></div>
+<div class="card-body"><h3>Red Bull Summer Morango e Pêssego 250ml</h3><span class="preco"> R$ 7,79 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_SUMMER_MARACUJÁ_E_MELÃO_LATA_250ML_FOUR_PACK.jpg" alt="Red Bull Summer Maracujá" /></div>
+<div class="card-body"><h3>Red Bull Summer Maracujá e Melão 250ml</h3><span class="preco"> R$ 7,77 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/RED_BULL_SUGAR_FREE_AMORA_LATA_250ML_FOUR_PACK_NPAL.jpg" alt="Red Bull Sugar Free Amora" /></div>
+<div class="card-body"><h3>Red Bull Sugar Free Amora 250ml</h3><span class="preco"> R$ 8,07 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/mr_lion_honey.webp" alt="Mr Lion Honey" /></div>
+<div class="card-body"><h3>Mr Lion Honey</h3><span class="preco"> R$ 117,00 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/mr_lion_capuccino.webp" alt="Mr Lion Capuccino" /></div>
+<div class="card-body"><h3>Mr Lion Capuccino</h3><span class="preco"> R$ 117,00 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ REFRIGERANTE ═══════════════ -->
+  <section class="categoria" id="refrigerante">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/refrigerante_coca.jpg" alt="Refrigerante" />
+      <h2>🥤 Refrigerante</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/COCA_COLA_LT_350ML.png" alt="Coca-Cola Lata 350ml" /></div>
+<div class="card-body"><h3>Coca-Cola Lata 350ml</h3><span class="preco"> R$ 3,58 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/refrigerante_coca_zero.jpg" alt="Coca-Cola Zero Lata" /></div>
+<div class="card-body"><h3>Coca-Cola Zero Lata 350ml</h3><span class="preco"> R$ 21,28 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/COCA-COLA_ORIGINAL_PET_2L.jpg" alt="Coca-Cola PET 2L" /></div>
+<div class="card-body"><h3>Coca-Cola Original PET 2L</h3><span class="preco"> R$ 11,12 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/refrigerante_coca_2l_zero.jpg" alt="Coca Zero 2L" /></div>
+<div class="card-body"><h3>Coca-Cola Zero PET 2L</h3><span class="preco"> R$ 11,12 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/COCA_ZERO_310ML.jpg" alt="Coca Zero 310ml" /></div>
+<div class="card-body"><h3>Coca-Cola Zero 310ml</h3><span class="preco"></span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/pepsi_black.jpg" alt="Pepsi Black" /></div>
+<div class="card-body"><h3>Pepsi Black</h3><span class="preco"> R$ 3,90 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/FANTA_LARANJA_PET_2L.png" alt="Fanta Laranja PET 2L" /></div>
+<div class="card-body"><h3>Fanta Laranja PET 2L</h3><span class="preco"> R$ 8,91 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/refrigerante_fantaLT.jpg" alt="Fanta Laranja Lata 350ml" /></div>
+<div class="card-body"><h3>Fanta Laranja Lata 350ml</h3><span class="preco"> R$ 3,58 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/FANTA_UVA_PET2.jpg" alt="Fanta Uva PET 2L" /></div>
+<div class="card-body"><h3>Fanta Uva PET 2L</h3><span class="preco"> R$ 8,91 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/refrigerante_uvalt.jpg" alt="Fanta Uva Lata 350ml" /></div>
+<div class="card-body"><h3>Fanta Uva Lata 350ml</h3><span class="preco"> R$ 1,64 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SPRITE_ORIGINAL_LT_350ML.jpg" alt="Sprite Lata 350ml" /></div>
+<div class="card-body"><h3>Sprite Original Lata 350ml</h3><span class="preco"> R$ 3,29 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/SPRITE_ORIGINAL_PET_2L.png" alt="Sprite PET 2L" /></div>
+<div class="card-body"><h3>Sprite Original PET 2L</h3><span class="preco"> R$ 8,91 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GUARANA_CHP_ANTARCTICA_PET_2L.jpg" alt="Guaraná Antarctica PET 2L" /></div>
+<div class="card-body"><h3>Guaraná Antarctica PET 2L</h3><span class="preco"> R$ 9,53 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GUARANA_CHP_ANTARCTICA_PET_2L.jpg" alt="Guaraná Antarctica Lata" /></div>
+<div class="card-body"><h3>Guaraná Antarctica Lata 350ml</h3><span class="preco"> R$ 3,03 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GUARANA_CHP_ANTARCTICA_PET_2L.jpg" alt="Guaraná Zero Lata" /></div>
+<div class="card-body"><h3>Guaraná Zero Antarctica Lata 350ml</h3><span class="preco"> R$ 3,03 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ LICOR ═══════════════ -->
+  <section class="categoria" id="licor">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/licor_amarula.webp" alt="Licor" />
+      <h2>🍯 Licor</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/AMARULA_750ML.jpg" alt="Amarula 750ml" /></div>
+<div class="card-body"><h3>Amarula 750ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LICOR_AMARULA_VANILLA_SPICE_CREAM_12X750.jpg" alt="Amarula Vanilla Spice Cream" /></div>
+<div class="card-body"><h3>Amarula Vanilla Spice Cream 750ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/AMARULA_CREAM_RASPBERRY_12X750ML.jpg" alt="Amarula Raspberry" /></div>
+<div class="card-body"><h3>Amarula Cream Raspberry 750ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/AMARULA_CREAM_CHOCOLATE_12X750ML.png" alt="Amarula Chocolate" /></div>
+<div class="card-body"><h3>Amarula Cream Chocolate 750ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LICOR_43_CREME_BRULE_6X700ML.png" alt="Licor 43 Creme Brule" /></div>
+<div class="card-body"><h3>Licor 43 Creme Brulé 700ml</h3><span class="preco"> R$ 220,99 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LICOR_43_CHOCOLATE_700ML.png" alt="Licor 43 Chocolate" /></div>
+<div class="card-body"><h3>Licor 43 Chocolate 700ml</h3><span class="preco"> R$ 207,99 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LICOR_43_BARISTO_6X700ML.jpg" alt="Licor 43 Baristo" /></div>
+<div class="card-body"><h3>Licor 43 Baristo 700ml</h3><span class="preco"> R$ 189,15 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LICOR_43.jpg" alt="Licor 43" /></div>
+<div class="card-body"><h3>Licor 43</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CAMPARI_998ML.png" alt="Campari 998ml" /></div>
+<div class="card-body"><h3>Campari 998ml</h3><span class="preco"> R$ 59,67 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/APEROL_APERETIVO_750ML.webp" alt="Aperol 750ml" /></div>
+<div class="card-body"><h3>Aperol Aperetivo 750ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/JAGERMEISTER.png" alt="Jagermeister" /></div>
+<div class="card-body"><h3>Jägermeister</h3><span class="preco"> R$ 130,00 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BALLENA_CHOCOLATE_750ML.jpeg" alt="Ballena Chocolate" /></div>
+<div class="card-body"><h3>Ballena Chocolate 750ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BALLENA_COCO_750ML.jpg" alt="Ballena Coco" /></div>
+<div class="card-body"><h3>Ballena Coco 750ml</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/APERETIVO_HAMBRE_ITALIANO_750ML.jpg" alt="Aperetivo Hambre Italiano" /></div>
+<div class="card-body"><h3>Aperetivo Hambre Italiano 750ml</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NEGRONI_HAMBRE_PROFANO_750ML.jpg" alt="Negroni Hambre Profano" /></div>
+<div class="card-body"><h3>Negroni Hambre Profano 750ml</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/LICOR_DON_LUIS_750ML.jpg" alt="Don Luis 750ml" /></div>
+<div class="card-body"><h3>Licor Don Luis 750ml</h3><span class="preco"> R$ 79,30 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BLL750_LIMONCELLO_BRASILIANO_750_ML.png" alt="Limoncello Brasiliano" /></div>
+<div class="card-body"><h3>Limoncello Brasiliano 750ml</h3><span class="preco"> R$ 97,37 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/DOSE_BANANINHA_50ML.jpg" alt="Dose Bananinha" /></div>
+<div class="card-body"><h3>Dose Bananinha 50ml</h3><span class="preco"> R$ 5,33 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/DOSE_DOCE_DE_LEITE_50ML.png" alt="Dose Doce de Leite" /></div>
+<div class="card-body"><h3>Dose Doce de Leite 50ml</h3><span class="preco"> R$ 5,33 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ CACHAÇA ═══════════════ -->
+  <section class="categoria" id="cachaca">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/cachaca.jpg" alt="Cachaça" />
+      <h2>🌿 Cachaça</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CACHAÇA_SAGATIBA.jpg" alt="Cachaça Sagatiba" /></div>
+<div class="card-body"><h3>Cachaça Sagatiba</h3><span class="preco"> R$ 51,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CACHAÇA_CAICARA_BRAZIL_750ML.jpg" alt="Caiçara Brazil Fire" /></div>
+<div class="card-body"><h3>Caiçara Brazil Fire</h3><span class="preco"> R$ 72,15 </span></div>
+      </div>
+      <!-- Aguardente -->
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/CR&F_Aguardente.jpg" alt="CR&F Aguardente" /></div>
+<div class="card-body"><h3>CR&amp;F Aguardente</h3><span class="preco"> R$ -   </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/NINA_BANANA_750_ML.jpg" alt="Nina Banana 750ml" /></div>
+<div class="card-body"><h3>Nina Banana 750ml</h3><span class="preco"> R$ 77,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BLA750_NUTKA_AVELA_750_ML.jpg" alt="Nutka Avela 750ml" /></div>
+<div class="card-body"><h3>Nutka Avela 750ml</h3><span class="preco"> R$ 77,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/BLJ750_JAMBU_750_ML.jpg" alt="Jambu 750ml" /></div>
+<div class="card-body"><h3>Jambu 750ml</h3><span class="preco"> R$ 77,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ TEQUILA ═══════════════ -->
+  <section class="categoria" id="tequila">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/tequila_josecuervo.jpg" alt="Tequila" />
+      <h2>🌵 Tequila</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/JOSE_CUERVO_GOLD.jpeg" alt="Jose Cuervo Gold" /></div>
+<div class="card-body"><h3>Jose Cuervo Gold</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/tequila_josecuervo.jpg" alt="Jose Cuervo Prata" /></div>
+<div class="card-body"><h3>Tequila Jose Cuervo Prata</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ ÁGUA ═══════════════ -->
+  <section class="categoria" id="agua">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/refrigerante_coca.jpg" alt="Água" />
+      <h2>💧 Água</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/Crystal_1.5L_Com_Gas.webp" alt="Crystal 1.5L Com Gás" /></div>
+<div class="card-body"><h3>Crystal 1,5L Com Gás</h3><span class="preco"> R$ 3,56 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/Crystal_1.5L_sem_Gas.webp" alt="Crystal 1.5L Sem Gás" /></div>
+<div class="card-body"><h3>Crystal 1,5L Sem Gás</h3><span class="preco"> R$ 3,42 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/Crystal_500ml_Com_Gas.webp" alt="Crystal 500ml Com Gás" /></div>
+<div class="card-body"><h3>Crystal 500ml Com Gás</h3><span class="preco"> R$ 2,17 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/Crystal 500ml_Sem_Gas.webp" alt="Crystal 500ml Sem Gás" /></div>
+<div class="card-body"><h3>Crystal 500ml Sem Gás</h3><span class="preco"> R$ 2,07 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/Acqua_Panna_250ml.webp" alt="Acqua Panna 250ml" /></div>
+<div class="card-body"><h3>Acqua Panna 250ml</h3><span class="preco"> R$ 12,86 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ OUTROS ═══════════════ -->
+  <section class="categoria" id="outros">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/logo.jpeg" alt="Outros" />
+      <h2>🛒 Outros Produtos</h2>
+    </div>
+    <div class="produtos-grid">
+      <!-- Absinto -->
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/d3absinto-kosten-certo.jpg" alt="Absinto Kaersten" /></div>
+<div class="card-body"><h3>Absinto Kaersten</h3><span class="preco"> R$ 51,87 </span></div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/ADEGA_DE_PALMELA_MOSCATEL_DE_SETÚBAL_D.O_-_PENÍNSULA_DE_SETÚ.png" alt="Adega de Palmela Moscatel" /></div>
+<div class="card-body"><h3>Adega de Palmela Moscatel de Setúbal D.O</h3><span class="preco"> R$ 87,67 </span></div>
+      </div>
+      <!-- Isotônico -->
+      <div class="card">
+        <div class="card-img-wrap"><img src="images/GATORADE_MORANGO-MARACUJA_PET_500ML.jpg" alt="Gatorade Morango-Maracujá" /></div>
+<div class="card-body"><h3>Gatorade Morango-Maracujá PET 500ml</h3><span class="preco"> R$ 6,23 </span></div>
+      </div>
+
+
+</main>
+
+<footer>
+  <img class="logo-footer" src="images/logo.jpeg" alt="Logo" />
+  <p>Catálogo de Bebidas &mdash; Todos os preços em Reais (R$)</p>
+  <p style="margin-top:6px; font-size:0.78rem;">Preços sujeitos a alteração sem aviso prévio.</p>
+</footer>
+
+<style>
+/* Estilos para o Modal de Cadastro */
+#modal-cadastro {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+.modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.modal-content h2 { margin-top: 0; color: #3d4f45; font-size: 1.3rem; margin-bottom: 15px; text-align: center; }
+.modal-content label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; text-align: left; font-size: 0.9rem; }
+.modal-content input, .modal-content select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; -webkit-appearance: none; }
+.modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+.btn-confirmar { background: #3d4f45; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; }
+.btn-cancelar { background: #ccc; color: #333; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; }
+
+/* Botões Flutuantes */
+#btn-relatorio, #btn-limpar {
+    position: fixed;
+    bottom: 20px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    z-index: 9000;
+    display: none;
+    font-weight: bold;
+    border: none;
+    color: white;
+    touch-action: manipulation;
+}
+#btn-relatorio { right: 20px; background: #3d4f45; }
+#btn-limpar { left: 20px; background: #c0392b; }
+
+@media (max-width: 768px) {
+    #btn-relatorio { right: 10px; bottom: 10px; padding: 12px 15px; font-size: 0.9rem; }
+    #btn-limpar { right: auto; left: 10px; bottom: 10px; padding: 12px 15px; font-size: 0.9rem; }
+}
+
+/* Controles nos Cards */
+.controles-pedido {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+.btn-qtd {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+.btn-menos { border: 1px solid #3d4f45; background: white; color: #3d4f45; }
+.btn-mais { border: none; background: #3d4f45; color: white; }
+.input-qtd {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-weight: bold;
+    background: #fff;
+    padding: 6px;
+    font-size: 1rem;
+}
+
+/* Overlay do Relatório (para Mobile) */
+#relatorio-overlay {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    overflow-y: auto;
+    padding: 20px;
+}
+.relatorio-header-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3d4f45;
+}
+.btn-rel-mobile {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    flex: 1;
+    text-align: center;
+}
+.btn-whatsapp { background: #25D366; color: white; width: 100%; margin-bottom: 10px; font-size: 1.1rem; }
+
+/* Estilos de Impressão - CORREÇÃO DEFINITIVA */
+@media print {
+    /* Esconde TUDO da página original */
+    body > *:not(#relatorio-overlay) {
+        display: none !important;
+    }
+    
+    /* Garante que o overlay e seu conteúdo sejam visíveis */
+    #relatorio-overlay {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Esconde os botões de controle do relatório na impressão */
+    .no-print, .relatorio-header-mobile {
+        display: none !important;
+    }
+    
+    /* Formatação do conteúdo do relatório para papel */
+    #relatorio-conteudo {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Evita quebras de página no meio de itens */
+    tr { page-break-inside: avoid; }
+}
+</style>
+
+<!-- Estrutura do Modal -->
+<div id="modal-cadastro">
+    <div class="modal-content">
+        <h2>Identificação da Empresa</h2>
+        <label for="nome-cliente" id="label-nome">Nome da Empresa:</label>
+        <input type="text" id="nome-cliente" placeholder="Digite o nome da empresa">
+        <div id="campo-cnpj">
+            <label for="cnpj-cliente">CNPJ (Obrigatório):</label>
+            <input type="text" id="cnpj-cliente" placeholder="00.000.000/0000-00">
+        </div>
+        <label for="email-cliente">E-mail:</label>
+        <input type="email" id="email-cliente" placeholder="seu@email.com">
+        <label for="tel-cliente">Telefone:</label>
+        <input type="tel" id="tel-cliente" placeholder="(00) 00000-0000">
+        <div class="modal-buttons">
+            <button class="btn-cancelar" onclick="window.fecharModal()">Cancelar</button>
+            <button class="btn-confirmar" onclick="window.confirmarPedido()">Gerar Relatório</button>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay do Relatório -->
+<div id="relatorio-overlay">
+    <div class="relatorio-header-mobile no-print">
+        <button onclick="window.enviarWhatsApp()" class="btn-rel-mobile btn-whatsapp">✅ Enviar Pedido via WhatsApp</button>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="document.getElementById(\'relatorio-overlay\').style.display=\'none\'" style="background:#666;" class="btn-rel-mobile">Voltar</button>
+            <button onclick="window.print()" style="background:#3d4f45;" class="btn-rel-mobile">Imprimir</button>
+            <button onclick="window.baixarCSV()" style="background:#27ae60;" class="btn-rel-mobile">CSV</button>
+        </div>
+    </div>
+    <div id="relatorio-conteudo"></div>
+</div>
+
+<script>
+(function() {
+    let pedido = JSON.parse(localStorage.getItem(\'pedido_schneider\')) || {};
+    let dadosCliente = JSON.parse(localStorage.getItem(\'dados_cliente_schneider_pj\')) || {}; // Chave diferente para PJ
+
+    // Função de validação de CNPJ
+    function validarCNPJ(cnpj) {
+        cnpj = cnpj.replace(/[.\/-]/g, \'\');
+        if (cnpj == \'\') return false;
+        if (cnpj.length != 14) return false;
+        if (/^(\\d)\\1{13}$/.test(cnpj)) return false;
+
+        let tamanho = cnpj.length - 2;
+        let numeros = cnpj.substring(0, tamanho);
+        let digitos = cnpj.substring(tamanho);
+        let soma = 0;
+        let pos = tamanho - 7;
+        for (let i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) pos = 9;
+        }
+        let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0)) return false;
+
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0, tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (let i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(1)) return false;
+
+        return true;
+    }
+
+    window.atualizarContador = function() {
+        const totalItens = Object.values(pedido).reduce((acc, curr) => acc + curr.qtd, 0);
+        const btnRelatorio = document.getElementById(\'btn-relatorio\');
+        const btnLimpar = document.getElementById(\'btn-limpar\');
+        if (btnRelatorio) {
+            btnRelatorio.innerHTML = `📋 Relatório (${totalItens})`;
+            btnRelatorio.style.display = totalItens > 0 ? \'block\' : \'none\';
+        }
+        if (btnLimpar) {
+            btnLimpar.style.display = totalItens > 0 ? \'block\' : \'none\';
+        }
+        localStorage.setItem(\'pedido_schneider\', JSON.stringify(pedido));
+    };
+
+    window.alterarQuantidade = function(id, nome, preco, delta) {
+        if (!pedido[id]) pedido[id] = { nome, preco, qtd: 0 };
+        pedido[id].qtd += delta;
+        if (pedido[id].qtd <= 0) delete pedido[id];
+        const input = document.getElementById(`qtd-${id}`);
+        if (input) input.value = pedido[id] ? pedido[id].qtd : 0;
+        window.atualizarContador();
+    };
+
+    window.digitarQuantidade = function(id, nome, preco, valor) {
+        const qtd = parseInt(valor) || 0;
+        if (qtd <= 0) delete pedido[id];
+        else pedido[id] = { nome, preco, qtd: qtd };
+        const input = document.getElementById(`qtd-${id}`);
+        if (input) input.value = qtd > 0 ? qtd : 0;
+        window.atualizarContador();
+    };
+
+    window.limparPedido = function() {
+        if (confirm("Deseja realmente limpar todo o seu pedido e recomeçar?")) {
+            pedido = {};
+            document.querySelectorAll(".input-qtd").forEach(input => input.value = 0);
+            window.atualizarContador();
+        }
+    };
+
+    window.abrirModal = function() { 
+        // Preencher campos com dados salvos se existirem
+        if (dadosCliente.nome) document.getElementById(\'nome-cliente\').value = dadosCliente.nome;
+        if (dadosCliente.email) document.getElementById(\'email-cliente\').value = dadosCliente.email;
+        if (dadosCliente.tel) document.getElementById(\'tel-cliente\').value = dadosCliente.tel;
+        if (dadosCliente.cnpj) {
+            document.getElementById(\'cnpj-cliente\').value = dadosCliente.cnpj;
+        }
+        document.getElementById(\'modal-cadastro\').style.display = \'flex\'; 
+    };
+    
+    window.fecharModal = function() { document.getElementById(\'modal-cadastro\').style.display = \'none\'; };
+
+    window.confirmarPedido = function() {
+        const nome = document.getElementById(\'nome-cliente\').value;
+        const cnpj = document.getElementById(\'cnpj-cliente\').value;
+        const email = document.getElementById(\'email-cliente\').value;
+        const tel = document.getElementById(\'tel-cliente\').value;
+
+        if (!nome) { alert("Por favor, preencha o Nome da Empresa."); return; }
+        if (!cnpj) { alert("Por favor, preencha o CNPJ."); return; }
+        if (!validarCNPJ(cnpj)) { alert("CNPJ inválido. Por favor, verifique."); return; }
+        if (!email) { alert("Por favor, preencha o E-mail."); return; }
+        if (!tel) { alert("Por favor, preencha o Telefone."); return; }
+        
+        // Salvar dados para a próxima vez
+        dadosCliente = { nome, email, tel, cnpj, data: new Date().toLocaleDateString(\'pt-BR\') };
+        localStorage.setItem(\'dados_cliente_schneider_pj\', JSON.stringify(dadosCliente)); // Chave diferente para PJ
+        
+        window.fecharModal();
+        window.gerarRelatorio();
+    };
+
+    window.gerarRelatorio = function() {
+        const itens = Object.values(pedido);
+        if (itens.length === 0) return;
+        let totalGeral = 0;
+        let tabelaHtml = "";
+        
+        itens.forEach(item => {
+            const precoLimpo = item.preco.replace(\'R$\' , \'\').replace(/\\./g, \'\').replace(\'\', \'.\').trim();
+            const precoNum = parseFloat(precoLimpo) || 0;
+            const subtotal = precoNum * item.qtd;
+            totalGeral += subtotal;
+            tabelaHtml += `<tr><td style="border:1px solid #ddd; padding:8px;">${item.nome}</td><td style="border:1px solid #ddd; padding:8px; text-align:center;">${item.qtd}</td><td style="border:1px solid #ddd; padding:8px;">${item.preco}</td><td style="border:1px solid #ddd; padding:8px;">R$ ${subtotal.toLocaleString(\'pt-BR\', {minimumFractionDigits: 2})}</td></tr>`;
+        });
+
+        const relatorioHtml = `
+            <div style="font-family:Arial; color:#333; max-width:800px; margin:0 auto;">
+                <div style="text-align:center; border-bottom:2px solid #3d4f45; padding-bottom:15px; margin-bottom:20px;">
+                    <h1 style="margin:0; color:#3d4f45; font-size:1.5rem;">RELATÓRIO DE PEDIDO (PJ)</h1>
+                    <p style="margin:5px 0;">Schneider Bebidas | Data: ${dadosCliente.data}</p>
+                </div>
+                <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px; border-left:5px solid #3d4f45;">
+                    <p><strong>Empresa:</strong> ${dadosCliente.nome}</p>
+                    <p><strong>CNPJ:</strong> ${dadosCliente.cnpj}</p>
+                    <p><strong>E-mail:</strong> ${dadosCliente.email}</p>
+                    <p><strong>Telefone:</strong> ${dadosCliente.tel}</p>
+                </div>
+                <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:0.9rem;">
+                    <thead><tr style="background:#3d4f45; color:#fff;">
+                        <th style="border:1px solid #ddd; padding:8px; text-align:left;">Produto</th>
+                        <th style="border:1px solid #ddd; padding:8px; text-align:center;">Qtd</th>
+                        <th style="border:1px solid #ddd; padding:8px; text-align:left;">Preço</th>
+                        <th style="border:1px solid #ddd; padding:8px; text-align:left;">Subtotal</th>
+                    </tr></thead>
+                    <tbody>${tabelaHtml}</tbody>
+                </table>
+                <div style="text-align:right; font-weight:bold; font-size:1.1rem; color:#3d4f45;">Total: R$ ${totalGeral.toLocaleString(\'pt-BR\', {minimumFractionDigits: 2})}</div>
+                <div style="margin-top:30px; font-size:0.8rem; color:#666; text-align:center;"><p>Documento gerado para conferência de pedido.</p></div>
+            </div>
+        `;
+
+        document.getElementById(\'relatorio-conteudo\').innerHTML = relatorioHtml;
+        document.getElementById(\'relatorio-overlay\').style.display = \'block\';
+    };
+
+    window.enviarWhatsApp = function() {
+        const itens = Object.values(pedido);
+        let totalGeral = 0;
+        let msg = `*PEDIDO (PJ) - SCHNEIDER BEBIDAS*\n\n`;
+        msg += `*Data:* ${dadosCliente.data}\n`;
+        msg += `*Empresa:* ${dadosCliente.nome}\n`;
+        msg += `*CNPJ:* ${dadosCliente.cnpj}\n`;
+        if (dadosCliente.tel) msg += `*Telefone:* ${dadosCliente.tel}\n\n`;
+        msg += `*ITENS DO PEDIDO:*\n`;
+        
+        itens.forEach(item => {
+            const precoLimpo = item.preco.replace(\'R$\' , \'\').replace(/\\./g, \'\').replace(\'\', \'.\').trim();
+            const precoNum = parseFloat(precoLimpo) || 0;
+            const subtotal = precoNum * item.qtd;
+            totalGeral += subtotal;
+            msg += `• ${item.qtd}x ${item.nome} (${item.preco})\n`;
+        });
+        
+        msg += `\n*TOTAL ESTIMADO: R$ ${totalGeral.toLocaleString(\'pt-BR\', {minimumFractionDigits: 2})}*`;
+        
+        const foneLoja = "5547933860900";
+        const url = `https://api.whatsapp.com/send?phone=${foneLoja}&text=${encodeURIComponent(msg)}`;
+        window.open(url, \'_blank\');
+    };
+
+    window.baixarCSV = function() {
+        const itens = Object.values(pedido);
+        let totalGeral = 0;
+        let csv = "DADOS DO CLIENTE\nData;Nome da Empresa;CNPJ;E-mail;Telefone\n";
+        csv += `${dadosCliente.data};${dadosCliente.nome};${dadosCliente.cnpj};${dadosCliente.email || \'-\'};${dadosCliente.tel || \'-\'}\n\nITENS DO PEDIDO\nProduto;Quantidade;Preco Unitario;Subtotal\n`;
+        
+        itens.forEach(item => {
+            const precoLimpo = item.preco.replace(\'R$\' , \'\').replace(/\\./g, \'\').replace(\'\', \'.\').trim();
+            const precoNum = parseFloat(precoLimpo) || 0;
+            const subtotal = precoNum * item.qtd;
+            totalGeral += subtotal;
+            csv += `${item.nome};${item.qtd};${item.preco};R$ ${subtotal.toLocaleString(\'pt-BR\', {minimumFractionDigits: 2})}\n`;
+        });
+        csv += "\n;TOTAL GERAL:;;R$ " + totalGeral.toLocaleString(\'pt-BR\', {minimumFractionDigits: 2});
+        
+        const blob = new Blob(["\\ufeff" + csv], {type: "text/csv;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `pedido_PJ_${dadosCliente.data.replace(/\\//g, \'-\' )}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+
+    function inicializarControles() {
+        const cards = document.querySelectorAll(".card");
+        cards.forEach((card, index) => {
+            if (card.querySelector(".controles-pedido")) return; // Já tem os controles
+            const body = card.querySelector(".card-body");
+            const h3 = card.querySelector(\'h3\');
+            const precoSpan = card.querySelector(".preco");
+            if (!body || !h3 || !precoSpan) return;
+            const id = \'prod-\' + index;
+            const nome = h3.innerText.replace(/\'/g, "\\'");
+            const preco = precoSpan.innerText;
+            const div = document.createElement(\'div\');
+            div.className = \'controles-pedido\';
+            div.innerHTML = `
+                <button class="btn-qtd btn-menos" onclick="window.alterarQuantidade(\'${id}\', \'${nome}\', \'${preco}\', -1)">-</button>
+                <input type="number" id="qtd-${id}" class="input-qtd" value="${pedido[id] ? pedido[id].qtd : 0}" onchange="window.digitarQuantidade(\'${id}\', \'${nome}\', \'${preco}\', this.value)">
+                <button class="btn-qtd btn-mais" onclick="window.alterarQuantidade(\'${id}\', \'${nome}\', \'${preco}\', 1)">+</button>
+            `;
+            body.appendChild(div);
+        });
+        if (!document.getElementById(\'btn-relatorio\')) {
+            const b1 = document.createElement(\'button\'); b1.id = \'btn-relatorio\'; b1.onclick = window.abrirModal; document.body.appendChild(b1);
+            const b2 = document.createElement(\'button\'); b2.id = \'btn-limpar\'; b2.innerHTML = \'🗑️ Limpar\'; b2.onclick = window.limparPedido; document.body.appendChild(b2);
+        }
+        window.atualizarContador();
+    }
+
+    // Usar MutationObserver para garantir que os cards sejam processados assim que aparecem
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.type === \'childList\' && mutation.addedNodes.length > 0) {
+                inicializarControles();
+            }
+        });
+    });
+
+    // Observar o corpo do documento para mudanças
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Tentar inicializar uma vez caso os cards já estejam presentes
+    inicializarControles();
+
+})();
+</script>
+</body></html>

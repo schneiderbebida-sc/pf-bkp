@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo de Bebidas</title>
+  <style>
+    :root {
+      --verde-escuro: #3d4f45;
+      --verde-medio: #4e6358;
+      --verde-claro: #6b8c7a;
+      --creme: #f0ece4;
+      --branco: #ffffff;
+      --cinza-claro: #f5f5f0;
+      --sombra: rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background-color: var(--cinza-claro);
+      color: #2c2c2c;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background-color: var(--verde-escuro);
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    header img.logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.25);
+    }
+
+    header .header-text h1 {
+      font-size: 2rem;
+      color: var(--creme);
+      letter-spacing: 2px;
+      font-weight: normal;
+    }
+
+    header .header-text p {
+      color: rgba(240,236,228,0.7);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background-color: var(--verde-medio);
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    nav a {
+      color: var(--creme);
+      text-decoration: none;
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+      border-radius: 3px;
+    }
+
+    nav a:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    /* ── SECTION ── */
+    .categoria {
+      margin-bottom: 60px;
+    }
+
+    .categoria-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--verde-escuro);
+    }
+
+    .categoria-header .cat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--verde-escuro);
+    }
+
+    .categoria-header h2 {
+      font-size: 1.6rem;
+      color: var(--verde-escuro);
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+
+    /* ── GRID ── */
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--branco);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px var(--sombra);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .card-img-wrap {
+      background: #f8f7f4;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    .card-img-wrap img {
+      max-height: 156px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .card-body {
+      padding: 14px 14px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-body h3 {
+      font-size: 0.88rem;
+      font-weight: bold;
+      color: #2c2c2c;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .card-body .preco {
+      font-size: 1.1rem;
+      color: var(--verde-escuro);
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background-color: var(--verde-escuro);
+      color: rgba(240,236,228,0.7);
+      text-align: center;
+      padding: 24px;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    footer img.logo-footer {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 600px) {
+      header { flex-direction: column; text-align: center; }
+      header .header-text h1 { font-size: 1.5rem; }
+      .produtos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    }
+
+    /* Estilos para o sistema de pedidos */
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 5px;
+    }
+    .quantity-controls button {
+      background-color: var(--verde-escuro);
+      color: var(--branco);
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+    .quantity-controls button:hover {
+      background-color: var(--verde-medio);
+    }
+    .quantity-controls input {
+      width: 50px;
+      text-align: center;
+      border: 1px solid var(--verde-medio);
+      border-radius: 5px;
+      padding: 5px 0;
+      font-size: 1rem;
+    }
+
+    .floating-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .floating-buttons button {
+      background-color: var(--verde-escuro);
+      color: var(--branco);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .floating-buttons button:hover {
+      background-color: var(--verde-medio);
+    }
+    .floating-buttons .clear-button {
+      background-color: #dc3545;
+    }
+    .floating-buttons .clear-button:hover {
+      background-color: #c82333;
+    }
+
+    /* Modal de Pedido */
+    .order-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+    .order-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .order-modal-content {
+      background: var(--branco);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease-in-out;
+    }
+    .order-modal-overlay.active .order-modal-content {
+      transform: translateY(0);
+    }
+    .order-modal-content h2 {
+      color: var(--verde-escuro);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+    .order-modal-content label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: bold;
+    }
+    .order-modal-content input[type="text"],
+    .order-modal-content input[type="email"],
+    .order-modal-content input[type="tel"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid var(--verde-medio);
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .order-modal-content .modal-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .order-modal-content .modal-buttons button {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .order-modal-content .modal-buttons .cancel-button {
+      background-color: #6c757d;
+      color: var(--branco);
+      border: none;
+      margin-right: 10px;
+    }
+    .order-modal-content .modal-buttons .cancel-button:hover {
+      background-color: #5a6268;
+    }
+    .order-modal-content .modal-buttons .submit-button {
+      background-color: var(--verde-escuro);
+      color: var(--branco);
+      border: none;
+    }
+    .order-modal-content .modal-buttons .submit-button:hover {
+      background-color: var(--verde-medio);
+    }
+
+    /* Estilos para o Relatório (Overlay) */
+    .report-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--cinza-claro);
+      z-index: 3000;
+      overflow-y: auto;
+      padding: 20px;
+      display: none; /* Escondido por padrão */
+    }
+    .report-overlay.active {
+      display: block;
+    }
+    .report-content {
+      background: var(--branco);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    .report-header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--verde-escuro);
+      padding-bottom: 15px;
+    }
+    .report-header h1 {
+      color: var(--verde-escuro);
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+    .report-header p {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    .report-details {
+      margin-bottom: 30px;
+      border: 1px solid #eee;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .report-details p {
+      margin-bottom: 5px;
+      font-size: 0.95rem;
+    }
+    .report-details strong {
+      color: var(--verde-escuro);
+    }
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    .report-table th,
+    .report-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .report-table th {
+      background-color: var(--verde-claro);
+      color: var(--branco);
+      font-weight: bold;
+    }
+    .report-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .report-total {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--verde-escuro);
+      margin-top: 20px;
+    }
+    .report-buttons {
+      text-align: center;
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    .report-buttons button {
+      background-color: var(--verde-escuro);
+      color: var(--branco);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background-color 0.2s;
+    }
+    .report-buttons button:hover {
+      background-color: var(--verde-medio);
+    }
+    .report-buttons .whatsapp-button {
+      background-color: #25D366;
+    }
+    .report-buttons .whatsapp-button:hover {
+      background-color: #1DA851;
+    }
+    .report-buttons .csv-button {
+      background-color: #007bff;
+    }
+    .report-buttons .csv-button:hover {
+      background-color: #0056b3;
+    }
+    .report-buttons .back-button {
+      background-color: #6c757d;
+    }
+    .report-buttons .back-button:hover {
+      background-color: #5a6268;
+    }
+
+    /* Estilos para impressão */
+    @media print {
+      body > *:not(.report-overlay) { display: none !important; }
+      .report-overlay { display: block !important; position: static; padding: 0; background: none; }
+      .report-content { box-shadow: none; margin: 0; padding: 0; }
+      .report-buttons { display: none !important; }
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <img class="logo" src="images/logo.jpeg" alt="Logo da Empresa" />
+  <div class="header-text">
+    <h1>CATÁLOGO DE BEBIDAS</h1>
+    <p>Seleção Premium de Produtos</p>
+  </div>
+</header>
+
+<nav>
+  <a href="#gin">Gin</a>
+  <a href="#vodka">Vodka</a>
+  <a href="#whisky">Whisky</a>
+  <a href="#espumante">Espumante</a>
+  <a href="#vinho-tinto">Vinho Tinto</a>
+  <a href="#vinho-branco">Vinho Branco</a>
+  <a href="#vinho-rose">Vinho Rosé</a>
+  <a href="#cerveja">Cerveja</a>
+  <a href="#energetico">Energético</a>
+  <a href="#refrigerante">Refrigerante</a>
+  <a href="#licor">Licor</a>
+  <a href="#cachaca">Cachaça</a>
+  <a href="#tequila">Tequila</a>
+  <a href="#agua">Água</a>
+  <a href="#sucos">Sucos</a>
+  <a href="#outros">Outros</a>
+</nav>
+
+<main>
+
+  <!-- ═══════════════ GIN ═══════════════ -->
+  <section class="categoria" id="gin">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/gin_tanqueray.png" alt="Gin" />
+      <h2>🍸 Gin</h2>
+    </div>
+    <div class="produtos-grid">
+
+      <div class="card" data-nome="Tanqueray Bossa 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/gin_tanqueray_bossa_750ml.jpg" alt="Tanqueray Bossa" /></div>
+        <div class="card-body"><h3>Tanqueray Bossa 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Tanqueray Rangpur" data-preco="109.20">
+        <div class="card-img-wrap"><img src="images/gin_tanqueray_rangpur.png" alt="Tanqueray Rangpur" /></div>
+        <div class="card-body"><h3>Tanqueray Rangpur</h3><span class="preco"> R$ 109,20 </span></div>
+      </div>
+      <div class="card" data-nome="Tanqueray 750ml" data-preco="129.87">
+        <div class="card-img-wrap"><img src="images/gin_tanqueray.png" alt="Tanqueray 750ml" /></div>
+        <div class="card-body"><h3>Tanqueray 750ml</h3><span class="preco"> R$ 129,87 </span></div>
+      </div>
+      <div class="card" data-nome="Gordons Sicilian 700ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/GORDONS_SICILIAN_700ML.jpg" alt="Gordon's Sicilian" /></div>
+        <div class="card-body"><h3>Gordons Sicilian 700ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Gordons London Dry 750ml" data-preco="90.87">
+        <div class="card-img-wrap"><img src="images/GORDONS_LONDON_DRY_750ML.jpg" alt="Gordon's London Dry" /></div>
+        <div class="card-body"><h3>Gordons London Dry 750ml</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card" data-nome="Bombay 750ml" data-preco="116.87">
+        <div class="card-img-wrap"><img src="images/GIN_BOMBAY_750ML.jpg" alt="Bombay 750ml" /></div>
+        <div class="card-body"><h3>Bombay 750ml</h3><span class="preco"> R$ 116,87 </span></div>
+      </div>
+      <div class="card" data-nome="Beefeater Black Cherry 700ml" data-preco="181.99">
+        <div class="card-img-wrap"><img src="images/GIN_BEEFEATER_BLACK_CHERRY_6X700ML.png" alt="Beefeater Black Cherry" /></div>
+        <div class="card-body"><h3>Beefeater Black Cherry 700ml</h3><span class="preco"> R$ 181,99 </span></div>
+      </div>
+      <div class="card" data-nome="Beefeater Pink" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/GIN_BEEFEATER_PINK.png" alt="Beefeater Pink" /></div>
+        <div class="card-body"><h3>Beefeater Pink</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Beefeater" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/GIN_BEEFEATER.jpg" alt="Beefeater" /></div>
+        <div class="card-body"><h3>Beefeater</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Rapa Nui Sauvignon Blanc" data-preco="37.57">
+        <div class="card-img-wrap"><img src="images/Rapa_nui_Sauvignon_Blanc.jpeg" alt="Rapa Nui Sauvignon Blanc" /></div>
+        <div class="card-body"><h3>Rapa Nui Sauvignon Blanc</h3><span class="preco"> R$ 37,57 </span></div>
+      </div>
+      <div class="card" data-nome="Ballena Original" data-preco="142.87">
+        <div class="card-img-wrap"><img src="images/BALLENA_ORIGINAL.jpg" alt="Ballena Original" /></div>
+        <div class="card-body"><h3>Ballena Original</h3><span class="preco"> R$ 142,87 </span></div>
+      </div>
+      <div class="card" data-nome="Bacco Dry Gin 700ml" data-preco="64.87">
+        <div class="card-img-wrap"><img src="images/BGP700_BACCO_DRY_GIN_700_ML.jpg" alt="Bacco Dry Gin" /></div>
+        <div class="card-body"><h3>Bacco Dry Gin 700ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+      <div class="card" data-nome="Hambre 750ml" data-preco="90.87">
+        <div class="card-img-wrap"><img src="images/GIN_HAMBRE_750ML.jpg" alt="Gin Hambre" /></div>
+        <div class="card-body"><h3>Hambre 750ml</h3><span class="preco"> R$ 90,87 </span></div>
+      </div>
+      <div class="card" data-nome="Miden Italian Aperitivo S/ Álcool 700ml" data-preco="64.87">
+        <div class="card-img-wrap"><img src="images/MZI700_MIDEN_ITALIAN_APERITIVO_SEM_ALCOOL_700_ML.webp" alt="Miden Italian Aperitivo" /></div>
+        <div class="card-body"><h3>Miden Italian Aperitivo S/ Álcool 700ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VODKA ═══════════════ -->
+  <section class="categoria" id="vodka">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vodka_greygoose.jpg" alt="Vodka" />
+      <h2>🥃 Vodka</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Vodka Grey Goose Citron 750ml" data-preco="184.59">
+        <div class="card-img-wrap"><img src="images/VODKA_GREY_GOOSE_CITRON_6X750_ML.jpg" alt="Grey Goose Citron" /></div>
+        <div class="card-body"><h3>Vodka Grey Goose Citron 750ml</h3><span class="preco"> R$ 184,59 </span></div>
+      </div>
+      <div class="card" data-nome="Vodka Grey Goose La Poire 750ml" data-preco="180.69">
+        <div class="card-img-wrap"><img src="images/VODKA_GREY_GOOSE_LA_POIRE_750_ML.png" alt="Grey Goose La Poire" /></div>
+        <div class="card-body"><h3>Vodka Grey Goose La Poire 750ml</h3><span class="preco"> R$ 180,69 </span></div>
+      </div>
+      <div class="card" data-nome="Vodka Grey Goose Original 750ml" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/vodka_greygoose.jpg" alt="Grey Goose Original" /></div>
+        <div class="card-body"><h3>Vodka Grey Goose Original 750ml</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Ciroc Red Berry 750ml" data-preco="181.99">
+        <div class="card-img-wrap"><img src="images/VODKA_CIROC_RED_BERRY_750ML.jpg" alt="Ciroc Red Berry" /></div>
+        <div class="card-body"><h3>Ciroc Red Berry 750ml</h3><span class="preco"> R$ 181,99 </span></div>
+      </div>
+      <div class="card" data-nome="Ciroc Coconut 750ml" data-preco="181.99">
+        <div class="card-img-wrap"><img src="images/VODKA_CIROC_COCONUT_750ML.jpg" alt="Ciroc Coconut" /></div>
+        <div class="card-body"><h3>Ciroc Coconut 750ml</h3><span class="preco"> R$ 181,99 </span></div>
+      </div>
+      <div class="card" data-nome="Ciroc 750ml" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/VODKA_CIROC_750ML.jpg" alt="Ciroc 750ml" /></div>
+        <div class="card-body"><h3>Ciroc 750ml</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Absolut Raspberri 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/VODKA_ABSOLUT_RASPBERRI_750ML.jpg" alt="Absolut Raspberri" /></div>
+        <div class="card-body"><h3>Absolut Raspberri 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Absolut 750ml" data-preco="81.87">
+        <div class="card-img-wrap"><img src="images/VODKA_ABSOLUT_750ML.jpg" alt="Absolut 750ml" /></div>
+        <div class="card-body"><h3>Absolut 750ml</h3><span class="preco"> R$ 81,87 </span></div>
+      </div>
+      <div class="card" data-nome="Smirnoff 998ml" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/VODKA_SMIRNOFF_998ML.jpg" alt="Smirnoff 998ml" /></div>
+        <div class="card-body"><h3>Smirnoff 998ml</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+      <div class="card" data-nome="Kadov 900ml" data-preco="21.87">
+        <div class="card-img-wrap"><img src="images/VODKA_KADVOV_900ML.jpg" alt="Kadov 900ml" /></div>
+        <div class="card-body"><h3>Kadov 900ml</h3><span class="preco"> R$ 21,87 </span></div>
+      </div>
+      <div class="card" data-nome="Orloff 1L" data-preco="32.87">
+        <div class="card-img-wrap"><img src="images/VODKA_ORLOFF_1L.jpg" alt="Orloff 1L" /></div>
+        <div class="card-body"><h3>Orloff 1L</h3><span class="preco"> R$ 32,87 </span></div>
+      </div>
+      <div class="card" data-nome="Askov 900ml" data-preco="16.87">
+        <div class="card-img-wrap"><img src="images/VODKA_ASKOV_900ML.jpg" alt="Askov 900ml" /></div>
+        <div class="card-body"><h3>Askov 900ml</h3><span class="preco"> R$ 16,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ WHISKY ═══════════════ -->
+  <section class="categoria" id="whisky">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/whisky_jackdaniels.jpg" alt="Whisky" />
+      <h2>🥃 Whisky</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Jack Daniel's Honey 1L" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_HONEY_1L.jpg" alt="Jack Daniel's Honey" /></div>
+        <div class="card-body"><h3>Jack Daniel's Honey 1L</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Jack Daniel's Fire 1L" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_FIRE_1L.jpg" alt="Jack Daniel's Fire" /></div>
+        <div class="card-body"><h3>Jack Daniel's Fire 1L</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Jack Daniel's Apple 1L" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/WHISKY_JACK_DANIELS_APPLE_1L.jpg" alt="Jack Daniel's Apple" /></div>
+        <div class="card-body"><h3>Jack Daniel's Apple 1L</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Jack Daniel's 1L" data-preco="148.89">
+        <div class="card-img-wrap"><img src="images/whisky_jackdaniels.jpg" alt="Jack Daniel's" /></div>
+        <div class="card-body"><h3>Jack Daniel's 1L</h3><span class="preco"> R$ 148,89 </span></div>
+      </div>
+      <div class="card" data-nome="Johnnie Walker Black Label 1L" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/WHISKY_JOHNNIE_WALKER_BLACK_LABEL_1L.jpg" alt="Johnnie Walker Black Label" /></div>
+        <div class="card-body"><h3>Johnnie Walker Black Label 1L</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Johnnie Walker Red Label 1L" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_JOHNNIE_WALKER_RED_LABEL_1L.jpg" alt="Johnnie Walker Red Label" /></div>
+        <div class="card-body"><h3>Johnnie Walker Red Label 1L</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Buchanan's 12 Anos 1L" data-preco="181.99">
+        <div class="card-img-wrap"><img src="images/WHISKY_BUCHANANS_12_ANOS_1L.jpg" alt="Buchanan's 12 Anos" /></div>
+        <div class="card-body"><h3>Buchanan's 12 Anos 1L</h3><span class="preco"> R$ 181,99 </span></div>
+      </div>
+      <div class="card" data-nome="Chivas 12 Anos 1L" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/WHISKY_CHIVAS_12_ANOS_1L.jpg" alt="Chivas 12 Anos" /></div>
+        <div class="card-body"><h3>Chivas 12 Anos 1L</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Old Parr 12 Anos 1L" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/WHISKY_OLD_PARR_12_ANOS_1L.jpg" alt="Old Parr 12 Anos" /></div>
+        <div class="card-body"><h3>Old Parr 12 Anos 1L</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+      <div class="card" data-nome="Jameson 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_JAMESON_750ML.jpg" alt="Jameson 750ml" /></div>
+        <div class="card-body"><h3>Jameson 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="White Horse 1L" data-preco="81.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_WHITE_HORSE_1L.jpg" alt="White Horse 1L" /></div>
+        <div class="card-body"><h3>White Horse 1L</h3><span class="preco"> R$ 81,87 </span></div>
+      </div>
+      <div class="card" data-nome="Cavalo Branco 1L" data-preco="81.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_CAVALO_BRANCO_1L.jpg" alt="Cavalo Branco 1L" /></div>
+        <div class="card-body"><h3>Cavalo Branco 1L</h3><span class="preco"> R$ 81,87 </span></div>
+      </div>
+      <div class="card" data-nome="Passport 1L" data-preco="64.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_PASSPORT_1L.jpg" alt="Passport 1L" /></div>
+        <div class="card-body"><h3>Passport 1L</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+      <div class="card" data-nome="Natu Nobilis 1L" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_NATU_NOBILIS_1L.jpg" alt="Natu Nobilis 1L" /></div>
+        <div class="card-body"><h3>Natu Nobilis 1L</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+      <div class="card" data-nome="Black Stone 1L" data-preco="32.87">
+        <div class="card-img-wrap"><img src="images/WHISKY_BLACK_STONE_1L.jpg" alt="Black Stone 1L" /></div>
+        <div class="card-body"><h3>Black Stone 1L</h3><span class="preco"> R$ 32,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ ESPUMANTE ═══════════════ -->
+  <section class="categoria" id="espumante">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/espumante_chandon.jpg" alt="Espumante" />
+      <h2>🍾 Espumante</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Chandon Brut 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_CHANDON_BRUT_750ML.jpg" alt="Chandon Brut" /></div>
+        <div class="card-body"><h3>Chandon Brut 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Chandon Rosé 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_CHANDON_ROSE_750ML.jpg" alt="Chandon Rosé" /></div>
+        <div class="card-body"><h3>Chandon Rosé 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Salton Brut 750ml" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_SALTON_BRUT_750ML.jpg" alt="Salton Brut" /></div>
+        <div class="card-body"><h3>Salton Brut 750ml</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+      <div class="card" data-nome="Salton Moscatel 750ml" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/ESPUMANTE_SALTON_MOSCATEL_750ML.jpg" alt="Salton Moscatel" /></div>
+        <div class="card-body"><h3>Salton Moscatel 750ml</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VINHO TINTO ═══════════════ -->
+  <section class="categoria" id="vinho-tinto">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vinho_tinto.jpg" alt="Vinho Tinto" />
+      <h2>🍷 Vinho Tinto</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Casillero del Diablo Cabernet Sauvignon 750ml" data-preco="64.87">
+        <div class="card-img-wrap"><img src="images/VINHO_TINTO_CASILLERO_DEL_DIABLO_CABERNET_SAUVIGNON_750ML.jpg" alt="Casillero del Diablo Cabernet Sauvignon" /></div>
+        <div class="card-body"><h3>Casillero del Diablo Cabernet Sauvignon 750ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+      <div class="card" data-nome="Santa Helena Reservado Cabernet Sauvignon 750ml" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/VINHO_TINTO_SANTA_HELENA_RESERVADO_CABERNET_SAUVIGNON_750ML.jpg" alt="Santa Helena Reservado Cabernet Sauvignon" /></div>
+        <div class="card-body"><h3>Santa Helena Reservado Cabernet Sauvignon 750ml</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+      <div class="card" data-nome="Gato Negro Cabernet Sauvignon 750ml" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/VINHO_TINTO_GATO_NEGRO_CABERNET_SAUVIGNON_750ML.jpg" alt="Gato Negro Cabernet Sauvignon" /></div>
+        <div class="card-body"><h3>Gato Negro Cabernet Sauvignon 750ml</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VINHO BRANCO ═══════════════ -->
+  <section class="categoria" id="vinho-branco">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vinho_branco.jpg" alt="Vinho Branco" />
+      <h2>🥂 Vinho Branco</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Casillero del Diablo Sauvignon Blanc 750ml" data-preco="64.87">
+        <div class="card-img-wrap"><img src="images/VINHO_BRANCO_CASILLERO_DEL_DIABLO_SAUVIGNON_BLANC_750ML.jpg" alt="Casillero del Diablo Sauvignon Blanc" /></div>
+        <div class="card-body"><h3>Casillero del Diablo Sauvignon Blanc 750ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+      <div class="card" data-nome="Santa Helena Reservado Sauvignon Blanc 750ml" data-preco="43.87">
+        <div class="card-img-wrap"><img src="images/VINHO_BRANCO_SANTA_HELENA_RESERVADO_SAUVIGNON_BLANC_750ML.jpg" alt="Santa Helena Reservado Sauvignon Blanc" /></div>
+        <div class="card-body"><h3>Santa Helena Reservado Sauvignon Blanc 750ml</h3><span class="preco"> R$ 43,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ VINHO ROSE ═══════════════ -->
+  <section class="categoria" id="vinho-rose">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/vinho_rose.jpg" alt="Vinho Rosé" />
+      <h2>🍷 Vinho Rosé</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Casillero del Diablo Rosé 750ml" data-preco="64.87">
+        <div class="card-img-wrap"><img src="images/VINHO_ROSE_CASILLERO_DEL_DIABLO_ROSE_750ML.jpg" alt="Casillero del Diablo Rosé" /></div>
+        <div class="card-body"><h3>Casillero del Diablo Rosé 750ml</h3><span class="preco"> R$ 64,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ CERVEJA ═══════════════ -->
+  <section class="categoria" id="cerveja">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/cerveja_heineken.jpg" alt="Cerveja" />
+      <h2>🍺 Cerveja</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Heineken Long Neck 330ml" data-preco="6.87">
+        <div class="card-img-wrap"><img src="images/CERVEJA_HEINEKEN_LONG_NECK_330ML.jpg" alt="Heineken Long Neck" /></div>
+        <div class="card-body"><h3>Heineken Long Neck 330ml</h3><span class="preco"> R$ 6,87 </span></div>
+      </div>
+      <div class="card" data-nome="Budweiser Long Neck 330ml" data-preco="5.87">
+        <div class="card-img-wrap"><img src="images/CERVEJA_BUDWEISER_LONG_NECK_330ML.jpg" alt="Budweiser Long Neck" /></div>
+        <div class="card-body"><h3>Budweiser Long Neck 330ml</h3><span class="preco"> R$ 5,87 </span></div>
+      </div>
+      <div class="card" data-nome="Stella Artois Long Neck 330ml" data-preco="5.87">
+        <div class="card-img-wrap"><img src="images/CERVEJA_STELLA_ARTOIS_LONG_NECK_330ML.jpg" alt="Stella Artois Long Neck" /></div>
+        <div class="card-body"><h3>Stella Artois Long Neck 330ml</h3><span class="preco"> R$ 5,87 </span></div>
+      </div>
+      <div class="card" data-nome="Corona Extra Long Neck 330ml" data-preco="7.87">
+        <div class="card-img-wrap"><img src="images/CERVEJA_CORONA_EXTRA_LONG_NECK_330ML.jpg" alt="Corona Extra Long Neck" /></div>
+        <div class="card-body"><h3>Corona Extra Long Neck 330ml</h3><span class="preco"> R$ 7,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ ENERGETICO ═══════════════ -->
+  <section class="categoria" id="energetico">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/energetico_redbull.jpg" alt="Energético" />
+      <h2>⚡ Energético</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Red Bull 250ml" data-preco="10.87">
+        <div class="card-img-wrap"><img src="images/ENERGETICO_RED_BULL_250ML.jpg" alt="Red Bull" /></div>
+        <div class="card-body"><h3>Red Bull 250ml</h3><span class="preco"> R$ 10,87 </span></div>
+      </div>
+      <div class="card" data-nome="Monster 473ml" data-preco="8.87">
+        <div class="card-img-wrap"><img src="images/ENERGETICO_MONSTER_473ML.jpg" alt="Monster" /></div>
+        <div class="card-body"><h3>Monster 473ml</h3><span class="preco"> R$ 8,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ REFRIGERANTE ═══════════════ -->
+  <section class="categoria" id="refrigerante">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/refrigerante_cocacola.jpg" alt="Refrigerante" />
+      <h2>🥤 Refrigerante</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Coca-Cola Lata 350ml" data-preco="3.87">
+        <div class="card-img-wrap"><img src="images/REFRIGERANTE_COCA_COLA_LATA_350ML.jpg" alt="Coca-Cola Lata" /></div>
+        <div class="card-body"><h3>Coca-Cola Lata 350ml</h3><span class="preco"> R$ 3,87 </span></div>
+      </div>
+      <div class="card" data-nome="Guaraná Antarctica Lata 350ml" data-preco="3.87">
+        <div class="card-img-wrap"><img src="images/REFRIGERANTE_GUARANA_ANTARCTICA_LATA_350ML.jpg" alt="Guaraná Antarctica Lata" /></div>
+        <div class="card-body"><h3>Guaraná Antarctica Lata 350ml</h3><span class="preco"> R$ 3,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ LICOR ═══════════════ -->
+  <section class="categoria" id="licor">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/licor_amarula.jpg" alt="Licor" />
+      <h2>🍹 Licor</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Amarula 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/LICOR_AMARULA_750ML.jpg" alt="Amarula" /></div>
+        <div class="card-body"><h3>Amarula 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+      <div class="card" data-nome="Licor 43 700ml" data-preco="159.89">
+        <div class="card-img-wrap"><img src="images/LICOR_43_700ML.jpg" alt="Licor 43" /></div>
+        <div class="card-body"><h3>Licor 43 700ml</h3><span class="preco"> R$ 159,89 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ CACHACA ═══════════════ -->
+  <section class="categoria" id="cachaca">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/cachaca_51.jpg" alt="Cachaça" />
+      <h2>🥃 Cachaça</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Cachaça 51 965ml" data-preco="16.87">
+        <div class="card-img-wrap"><img src="images/CACHACA_51_965ML.jpg" alt="Cachaça 51" /></div>
+        <div class="card-body"><h3>Cachaça 51 965ml</h3><span class="preco"> R$ 16,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ TEQUILA ═══════════════ -->
+  <section class="categoria" id="tequila">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/tequila_jose_cuervo.jpg" alt="Tequila" />
+      <h2>🌵 Tequila</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Jose Cuervo Ouro 750ml" data-preco="103.87">
+        <div class="card-img-wrap"><img src="images/TEQUILA_JOSE_CUERVO_OURO_750ML.jpg" alt="Jose Cuervo Ouro" /></div>
+        <div class="card-body"><h3>Jose Cuervo Ouro 750ml</h3><span class="preco"> R$ 103,87 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ ÁGUA ═══════════════ -->
+  <section class="categoria" id="agua">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/agua_crystal.jpg" alt="Água" />
+      <h2>💧 Água</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Crystal 1,5L Com Gás" data-preco="3.56">
+        <div class="card-img-wrap"><img src="images/AGUA_CRYSTAL_COM_GAS_1_5L.jpg" alt="Crystal Com Gás" /></div>
+        <div class="card-body"><h3>Crystal 1,5L Com Gás</h3><span class="preco"> R$ 3,56 </span></div>
+      </div>
+      <div class="card" data-nome="Crystal 1,5L Sem Gás" data-preco="3.42">
+        <div class="card-img-wrap"><img src="images/AGUA_CRYSTAL_SEM_GAS_1_5L.jpg" alt="Crystal Sem Gás" /></div>
+        <div class="card-body"><h3>Crystal 1,5L Sem Gás</h3><span class="preco"> R$ 3,42 </span></div>
+      </div>
+      <div class="card" data-nome="Crystal 500ml Com Gás" data-preco="2.17">
+        <div class="card-img-wrap"><img src="images/AGUA_CRYSTAL_COM_GAS_500ML.jpg" alt="Crystal 500ml Com Gás" /></div>
+        <div class="card-body"><h3>Crystal 500ml Com Gás</h3><span class="preco"> R$ 2,17 </span></div>
+      </div>
+      <div class="card" data-nome="Crystal 500ml Sem Gás" data-preco="2.07">
+        <div class="card-img-wrap"><img src="images/AGUA_CRYSTAL_SEM_GAS_500ML.jpg" alt="Crystal 500ml Sem Gás" /></div>
+        <div class="card-body"><h3>Crystal 500ml Sem Gás</h3><span class="preco"> R$ 2,07 </span></div>
+      </div>
+      <div class="card" data-nome="Acqua Panna 250ml" data-preco="12.86">
+        <div class="card-img-wrap"><img src="images/AGUA_ACQUA_PANNA_250ML.jpg" alt="Acqua Panna" /></div>
+        <div class="card-body"><h3>Acqua Panna 250ml</h3><span class="preco"> R$ 12,86 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ SUCOS ═══════════════ -->
+  <section class="categoria" id="sucos">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/logo.jpeg" alt="Sucos" />
+      <h2>🍹 Sucos</h2>
+    </div>
+    <div class="produtos-grid">
+      <div class="card" data-nome="Suco Skinka Frutas Cítricas - PET 450ml C12 Descartável" data-preco="3.84">
+        <div class="card-img-wrap"><img src="images/Suco Skinka Frutas Cítricas - PET 450ml C12 Descartável.png" alt="Suco Skinka Frutas Cítricas - PET 450ml C12 Descartável"/></div>
+        <div class="card-body"><h3>Suco Skinka Frutas Cítricas - PET 450ml C12 Descartável</h3><span class="preco"> R$ 3,84 </span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════ OUTROS ═══════════════ -->
+  <section class="categoria" id="outros">
+    <div class="categoria-header">
+      <img class="cat-icon" src="images/logo.jpeg" alt="Outros" />
+      <h2>🛒 Outros Produtos</h2>
+    </div>
+    <div class="produtos-grid">
+      <!-- Outros produtos aqui -->
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <img class="logo-footer" src="images/logo.jpeg" alt="Logo da Empresa" />
+  <p>schneider.bebidas@outlook.com | 47 93386-0900</p>
+</footer>
+
+<div class="floating-buttons">
+  <button id="clear-order-button">🗑️ Limpar Tudo</button>
+  <button id="generate-report-button">📋 Gerar Relatório</button>
+</div>
+
+<div class="order-modal-overlay">
+  <div class="order-modal-content">
+    <h2>Dados do Cliente</h2>
+    <label for="client-name">Nome da Empresa:</label>
+    <input type="text" id="client-name" placeholder="Nome Completo ou Razão Social" required />
+
+    <label for="client-cnpj">CNPJ:</label>
+    <input type="text" id="client-cnpj" placeholder="XX.XXX.XXX/XXXX-XX" required />
+
+    <label for="client-email">E-mail:</label>
+    <input type="email" id="client-email" placeholder="seu.email@exemplo.com" required />
+
+    <label for="client-phone">Telefone:</label>
+    <input type="tel" id="client-phone" placeholder="(XX) XXXXX-XXXX" required />
+
+    <div class="modal-buttons">
+      <button class="cancel-button" id="cancel-modal-button">Cancelar</button>
+      <button class="submit-button" id="submit-modal-button">Gerar Relatório</button>
+    </div>
+  </div>
+</div>
+
+<div class="report-overlay">
+  <div class="report-content">
+    <div class="report-buttons">
+      <button id="print-report-button">🖨️ Imprimir / PDF</button>
+      <button id="download-csv-button" class="csv-button">📥 Baixar CSV (Excel)</button>
+      <button id="send-whatsapp-button" class="whatsapp-button">💬 Enviar via WhatsApp</button>
+      <button id="back-to-catalog-button" class="back-button">↩️ Voltar</button>
+    </div>
+    <div id="report-details-container"></div>
+  </div>
+</div>
+
+<script>
+  const PHONE_NUMBER = '5547933860900'; // Seu número de telefone para o WhatsApp
+
+  function formatCurrency(value) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+  }
+
+  function formatCnpj(cnpj) {
+    cnpj = cnpj.replace(/\D/g, '');
+    if (cnpj.length === 14) {
+      return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+    }
+    return cnpj;
+  }
+
+  function validateCnpj(cnpj) {
+    cnpj = cnpj.replace(/\D/g, '');
+    if (cnpj.length !== 14) return false;
+    if (/^(\d)\1+$/.test(cnpj)) return false;
+
+    let size = cnpj.length - 2;
+    let numbers = cnpj.substring(0, size);
+    let digits = cnpj.substring(size);
+    let sum = 0;
+    let pos = size - 7;
+    for (let i = size; i >= 1; i--) {
+      sum += numbers.charAt(size - i) * pos--;
+      if (pos < 2) pos = 9;
+    }
+    let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    if (result != digits.charAt(0)) return false;
+
+    size = size + 1;
+    numbers = cnpj.substring(0, size);
+    sum = 0;
+    pos = size - 7;
+    for (let i = size; i >= 1; i--) {
+      sum += numbers.charAt(size - i) * pos--;
+      if (pos < 2) pos = 9;
+    }
+    result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    if (result != digits.charAt(1)) return false;
+
+    return true;
+  }
+
+  function saveClientData(data) {
+    localStorage.setItem('clientDataPJ', JSON.stringify(data));
+  }
+
+  function loadClientData() {
+    const data = localStorage.getItem('clientDataPJ');
+    return data ? JSON.parse(data) : null;
+  }
+
+  function updateQuantityDisplay(cardElement, quantity) {
+    const quantityInput = cardElement.querySelector('.quantity-input');
+    if (quantityInput) {
+      quantityInput.value = quantity;
+    }
+    // Atualiza o localStorage para o produto específico
+    const productName = cardElement.dataset.nome;
+    const productQuantities = JSON.parse(localStorage.getItem('productQuantities') || '{}');
+    if (quantity > 0) {
+      productQuantities[productName] = quantity;
+    } else {
+      delete productQuantities[productName];
+    }
+    localStorage.setItem('productQuantities', JSON.stringify(productQuantities));
+    updateFloatingButtonsVisibility();
+  }
+
+  function getProductQuantity(productName) {
+    const productQuantities = JSON.parse(localStorage.getItem('productQuantities') || '{}');
+    return productQuantities[productName] || 0;
+  }
+
+  function updateFloatingButtonsVisibility() {
+    const productQuantities = JSON.parse(localStorage.getItem('productQuantities') || '{}');
+    const totalSelectedItems = Object.keys(productQuantities).length;
+    const floatingButtons = document.querySelector('.floating-buttons');
+    if (totalSelectedItems > 0) {
+      floatingButtons.style.display = 'flex';
+    } else {
+      floatingButtons.style.display = 'none';
+    }
+  }
+
+  function createQuantityControls(cardElement) {
+    if (cardElement.querySelector('.quantity-controls')) return; // Já existem controles
+
+    const productName = cardElement.dataset.nome;
+    const initialQuantity = getProductQuantity(productName);
+
+    const controlsDiv = document.createElement('div');
+    controlsDiv.className = 'quantity-controls';
+
+    const minusButton = document.createElement('button');
+    minusButton.textContent = '-';
+    minusButton.onclick = () => {
+      let quantity = parseInt(quantityInput.value) || 0;
+      if (quantity > 0) {
+        quantity--;
+        updateQuantityDisplay(cardElement, quantity);
+      }
+    };
+
+    const quantityInput = document.createElement('input');
+    quantityInput.type = 'number';
+    quantityInput.min = '0';
+    quantityInput.value = initialQuantity;
+    quantityInput.className = 'quantity-input';
+    quantityInput.onchange = () => {
+      let quantity = parseInt(quantityInput.value) || 0;
+      if (quantity < 0) quantity = 0;
+      updateQuantityDisplay(cardElement, quantity);
+    };
+    quantityInput.onkeyup = (event) => {
+      if (event.key === 'Enter') {
+        quantityInput.blur(); // Tira o foco para disparar o onchange
+      }
+    };
+
+    const plusButton = document.createElement('button');
+    plusButton.textContent = '+';
+    plusButton.onclick = () => {
+      let quantity = parseInt(quantityInput.value) || 0;
+      quantity++;
+      updateQuantityDisplay(cardElement, quantity);
+    };
+
+    controlsDiv.appendChild(minusButton);
+    controlsDiv.appendChild(quantityInput);
+    controlsDiv.appendChild(plusButton);
+
+    cardElement.querySelector('.card-body').appendChild(controlsDiv);
+    updateFloatingButtonsVisibility();
+  }
+
+  function initializeQuantityControls() {
+    const productCards = document.querySelectorAll('.card');
+    productCards.forEach(card => {
+      createQuantityControls(card);
+    });
+  }
+
+  // MutationObserver para garantir que os controles sejam adicionados a novos cards (se houver carregamento dinâmico)
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1 && node.classList.contains('card')) {
+            createQuantityControls(node);
+          }
+          // Se um grid de produtos foi adicionado, verificar seus filhos
+          if (node.nodeType === 1 && node.classList.contains('produtos-grid')) {
+            node.querySelectorAll('.card').forEach(card => createQuantityControls(card));
+          }
+        });
+      }
+    });
+  });
+
+  // Observar o main para adição de novas seções ou cards
+  const mainElement = document.querySelector('main');
+  if (mainElement) {
+    observer.observe(mainElement, { childList: true, subtree: true });
+  }
+
+  // Inicializar controles para cards já existentes no carregamento inicial
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeQuantityControls();
+    updateFloatingButtonsVisibility();
+
+    const savedClientData = loadClientData();
+    if (savedClientData) {
+      document.getElementById('client-name').value = savedClientData.name;
+      document.getElementById('client-cnpj').value = savedClientData.cnpj;
+      document.getElementById('client-email').value = savedClientData.email;
+      document.getElementById('client-phone').value = savedClientData.phone;
+    }
+  });
+
+  // Event Listeners para os botões flutuantes
+  document.getElementById('clear-order-button').addEventListener('click', () => {
+    if (confirm('Tem certeza que deseja limpar todo o pedido?')) {
+      localStorage.removeItem('productQuantities');
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        input.value = 0;
+      });
+      updateFloatingButtonsVisibility();
+    }
+  });
+
+  document.getElementById('generate-report-button').addEventListener('click', () => {
+    document.querySelector('.order-modal-overlay').classList.add('active');
+  });
+
+  document.getElementById('cancel-modal-button').addEventListener('click', () => {
+    document.querySelector('.order-modal-overlay').classList.remove('active');
+  });
+
+  document.getElementById('submit-modal-button').addEventListener('click', () => {
+    const clientName = document.getElementById('client-name').value.trim();
+    const clientCnpj = document.getElementById('client-cnpj').value.trim();
+    const clientEmail = document.getElementById('client-email').value.trim();
+    const clientPhone = document.getElementById('client-phone').value.trim();
+
+    if (!clientName || !clientCnpj || !clientEmail || !clientPhone) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    if (!validateCnpj(clientCnpj)) {
+      alert('CNPJ inválido. Por favor, verifique e tente novamente.');
+      return;
+    }
+
+    const clientData = { name: clientName, cnpj: clientCnpj, email: clientEmail, phone: clientPhone };
+    saveClientData(clientData);
+
+    document.querySelector('.order-modal-overlay').classList.remove('active');
+    generateReport(clientData);
+  });
+
+  function generateReport(clientData) {
+    const productQuantities = JSON.parse(localStorage.getItem('productQuantities') || '{}');
+    let selectedProducts = [];
+    let totalOrderValue = 0;
+
+    for (const productName in productQuantities) {
+      const quantity = productQuantities[productName];
+      if (quantity > 0) {
+        const cardElement = document.querySelector(`.card[data-nome="${productName}"]`);
+        if (cardElement) {
+          const price = parseFloat(cardElement.dataset.preco);
+          const subtotal = price * quantity;
+          totalOrderValue += subtotal;
+          selectedProducts.push({ name: productName, quantity, price, subtotal });
+        }
+      }
+    }
+
+    if (selectedProducts.length === 0) {
+      alert('Nenhum produto selecionado para o relatório.');
+      return;
+    }
+
+    const reportDetailsContainer = document.getElementById('report-details-container');
+    reportDetailsContainer.innerHTML = ''; // Limpa conteúdo anterior
+
+    const reportHeaderHtml = `
+      <div class="report-header">
+        <h1>Relatório de Pedido</h1>
+        <p>Data: ${new Date().toLocaleDateString('pt-BR')}</p>
+      </div>
+      <div class="report-details">
+        <p><strong>Cliente:</strong> ${clientData.name}</p>
+        <p><strong>CNPJ:</strong> ${formatCnpj(clientData.cnpj)}</p>
+        <p><strong>E-mail:</strong> ${clientData.email}</p>
+        <p><strong>Telefone:</strong> ${clientData.phone}</p>
+      </div>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Preço Unit.</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${selectedProducts.map(p => `
+            <tr>
+              <td>${p.name}</td>
+              <td>${p.quantity}</td>
+              <td>${formatCurrency(p.price)}</td>
+              <td>${formatCurrency(p.subtotal)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <div class="report-total">Total do Pedido: ${formatCurrency(totalOrderValue)}</div>
+    `;
+
+    reportDetailsContainer.innerHTML = reportHeaderHtml;
+    document.querySelector('.report-overlay').classList.add('active');
+  }
+
+  document.getElementById('print-report-button').addEventListener('click', () => {
+    window.print();
+  });
+
+  document.getElementById('download-csv-button').addEventListener('click', () => {
+    const clientData = loadClientData();
+    const productQuantities = JSON.parse(localStorage.getItem('productQuantities') || '{}');
+    let selectedProducts = [];
+    let totalOrderValue = 0;
+
+    for (const productName in productQuantities) {
+      const quantity = productQuantities[productName];
+      if (quantity > 0) {
+        const cardElement = document.querySelector(`.card[data-nome="${productName}"]`);
+        if (cardElement) {
+          const price = parseFloat(cardElement.dataset.preco);
+          const subtotal = price * quantity;
+          totalOrderValue += subtotal;
+          selectedProducts.push({ name: productName, quantity, price, subtotal });
+        }
+      }
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += `Data;${new Date().toLocaleDateString('pt-BR')}\n`;
+    csvContent += `Cliente;${clientData.name}\n`;
+    csvContent += `CNPJ;${formatCnpj(clientData.cnpj)}\n`;
+    csvContent += `E-mail;${clientData.email}\n`;
+    csvContent += `Telefone;${clientData.phone}\n\n`;
+    csvContent += "Produto;Quantidade;Preço Unitário;Subtotal\n";
+
+    selectedProducts.forEach(p => {
+      csvContent += `${p.name};${p.quantity};${p.price.toFixed(2).replace('.', ',')};${p.subtotal.toFixed(2).replace('.', ',')}\n`;
+    });
+
+    csvContent += `\nTotal do Pedido;${totalOrderValue.toFixed(2).replace('.', ',')}\n`;
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `pedido_${clientData.name.replace(/\s/g, '_')}_${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  document.getElementById('send-whatsapp-button').addEventListener('click', () => {
+    const clientData = loadClientData();
+    const productQuantities = JSON.parse(localStorage.getItem('productQuantities') || '{}');
+    let selectedProducts = [];
+    let totalOrderValue = 0;
+
+    for (const productName in productQuantities) {
+      const quantity = productQuantities[productName];
+      if (quantity > 0) {
+        const cardElement = document.querySelector(`.card[data-nome="${productName}"]`);
+        if (cardElement) {
+          const price = parseFloat(cardElement.dataset.preco);
+          const subtotal = price * quantity;
+          totalOrderValue += subtotal;
+          selectedProducts.push({ name: productName, quantity, price, subtotal });
+        }
+      }
+    }
+
+    let whatsappMessage = `*NOVO PEDIDO - ${new Date().toLocaleDateString('pt-BR')}*\n\n`;
+    whatsappMessage += `*Dados do Cliente:*\n`;
+    whatsappMessage += `Empresa: ${clientData.name}\n`;
+    whatsappMessage += `CNPJ: ${formatCnpj(clientData.cnpj)}\n`;
+    whatsappMessage += `E-mail: ${clientData.email}\n`;
+    whatsappMessage += `Telefone: ${clientData.phone}\n\n`;
+    whatsappMessage += `*Itens do Pedido:*\n`;
+
+    selectedProducts.forEach(p => {
+      whatsappMessage += `- ${p.name} (Qtd: ${p.quantity}) - ${formatCurrency(p.subtotal)}\n`;
+    });
+
+    whatsappMessage += `\n*Total do Pedido: ${formatCurrency(totalOrderValue)}*\n`;
+    whatsappMessage += `\n_Aguardando confirmação._`;
+
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${encodeURIComponent(whatsappMessage)}`;
+    window.open(whatsappUrl, '_blank');
+  });
+
+  document.getElementById('back-to-catalog-button').addEventListener('click', () => {
+    document.querySelector('.report-overlay').classList.remove('active');
+  });
+
+</script>
+
+</body>
+</html>
